@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 import { User } from './models/User';
 const auth = express.Router()
 
-auth.get('/login', async (req: any, res: any) => {
+auth.get('/login', (req: any, res: any) => {
     try {
         var scopes = 'user-read-private user-read-email';
         res.redirect('https://accounts.spotify.com/authorize' +
@@ -17,13 +17,13 @@ auth.get('/login', async (req: any, res: any) => {
     }
 })
 
-auth.get('/login_callback', async (req: any, res: any) => {
+auth.get('/login_callback', (req: any, res: any) => {
     try {
 
         let code = req.query.code
         let state = req.query.state
 
-        await fetch('https://accounts.spotify.com/api/token', {
+        fetch('https://accounts.spotify.com/api/token', {
             method: 'POST',
             headers: {
                 //'Content-Type': 'application/json',
@@ -75,12 +75,12 @@ auth.get('/login_callback', async (req: any, res: any) => {
     }
 })
 
-auth.get('/spotify_new_access_token/:refresh_token', async (req: any, res: any) => {
+auth.get('/spotify_new_access_token/:refresh_token', (req: any, res: any) => {
     try {
 
         let refresh_token = req.query.refresh_token
 
-        let data = await fetch('https://accounts.spotify.com/api/token', {
+        fetch('https://accounts.spotify.com/api/token', {
             method: 'POST',
             headers: {
                 //'Content-Type': 'application/json',
@@ -106,7 +106,7 @@ auth.get('/spotify_new_access_token/:refresh_token', async (req: any, res: any) 
     }
 })
 
-auth.get('/logout', async (req: any, res: any) => {
+auth.get('/logout', (req: any, res: any) => {
     try {
         res.send('hi')
     }

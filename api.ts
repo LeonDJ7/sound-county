@@ -1,10 +1,10 @@
 const express = require('express')
 const api = express.Router()
 
-api.get('/topartists/:access_token/:time_range', async (req: any, res: any) => {
+api.get('/topartists/:access_token/:time_range', (req: any, res: any) => {
     try {
 
-        let data = await fetch('https://api.spotify.com/v1/me/top/artists', {
+        let data = fetch('https://api.spotify.com/v1/me/top/artists', {
             method: 'GET',
             headers: {
                 Authorization: 'Bearer ' + req.query.access_token
@@ -29,9 +29,9 @@ api.get('/topartists/:access_token/:time_range', async (req: any, res: any) => {
     }
 })
 
-api.get('/topsongs', async (req: any, res: any) => {
+api.get('/topsongs', (req: any, res: any) => {
     try {
-        let data = await fetch('https://api.spotify.com/v1/me/top/tracks', {
+        let data = fetch('https://api.spotify.com/v1/me/top/tracks', {
             method: 'GET',
             headers: {
                 Authorization: 'Bearer ' + req.query.access_token
@@ -55,7 +55,7 @@ api.get('/topsongs', async (req: any, res: any) => {
     }
 })
 
-api.get('/topgenres', async (req: any, res: any) => {
+api.get('/topgenres', (req: any, res: any) => {
     try {
         res.send('hi')
     }
@@ -64,7 +64,7 @@ api.get('/topgenres', async (req: any, res: any) => {
     }
 })
 
-api.get('/topsubgenres/:genre', async (req: any, res: any) => {
+api.get('/topsubgenres/:genre', (req: any, res: any) => {
     try {
         res.send('hi')
     }
@@ -73,7 +73,7 @@ api.get('/topsubgenres/:genre', async (req: any, res: any) => {
     }
 })
 
-api.get('/recommended/:genreinfo', async (req: any, res: any) => {
+api.get('/recommended/:genreinfo', (req: any, res: any) => {
     try {
         res.send('hi')
     }
@@ -82,7 +82,7 @@ api.get('/recommended/:genreinfo', async (req: any, res: any) => {
     }
 })
 
-api.get('/queue/:songinfo', async (req: any, res: any) => {
+api.get('/queue/:songinfo', (req: any, res: any) => {
     try {
         res.send('hi')
     }
