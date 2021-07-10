@@ -41,15 +41,6 @@ auth.get('/login_callback', async (req: any, res: any) => {
             return res.json()
         })
         .then((data: any) => {
-            /*
-            {
-                "access_token": "NgCXRK...MzYjw",
-                "token_type": "Bearer",
-                "scope": "user-read-private user-read-email",
-                "expires_in": 3600,
-                "refresh_token": "NgAagA...Um_SHo"
-            }
-            */
 
             fetch('https://api.spotify.com/v1/me', {
                 headers: {
