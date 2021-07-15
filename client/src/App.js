@@ -1,25 +1,25 @@
 import logo from './logo.svg';
+import 'antd/dist/antd.css'
+import { Layout, Content } from 'antd'
 import './App.css';
+import Nav from './components/nav/Nav'
+
+const { Footer } = Layout;
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <div className="App">
+            <Layout style={{ minHeight: '100vh' }}>
+                <Nav />
+                <Content style={{ margin: '0 16px' }}>
+                    
+                </Content>
+                <Footer style={{ textAlign: 'center' }}>
+                    created by Jared Dye, Leon Djusberg, and Adam Gilbert
+                </Footer>
+            </Layout>
+        </div>
+    );
 }
 
 export default App;
