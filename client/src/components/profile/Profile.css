@@ -1,0 +1,11 @@
+#project-root {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+}
+
+#profile-image {
+    width: 100px;
+    height: 100px;
+}

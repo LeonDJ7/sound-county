@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 import { User } from './models/User';
 const auth = express.Router()
 
-auth.get('/login', (req: any, res: any) => {
+auth.get('/log_in', (req: any, res: any) => {
     try {
         var scopes = 'user-read-private user-read-email';
         res.redirect('https://accounts.spotify.com/authorize' +
@@ -17,7 +17,7 @@ auth.get('/login', (req: any, res: any) => {
     }
 })
 
-auth.get('/login_callback', (req: any, res: any) => {
+auth.get('/log_in_callback', (req: any, res: any) => {
     try {
 
         let code = req.query.code
@@ -50,10 +50,12 @@ auth.get('/login_callback', (req: any, res: any) => {
             .then((res) => {
                 return res.json
             })
-            .then((user_data: any) => {
+            .then( async (user_data: any) => {
 
                 let new_user = new User({
                     email: user_data.email,
+                    username: user_data.display_name,
+                    image: user_data.images[0].url,
                     access_token: data.access_token,
                     refresh_token: data.refresh_token
                 })
@@ -63,8 +65,7 @@ auth.get('/login_callback', (req: any, res: any) => {
                     overwrite: true
                 }
     
-                User.findOneAndUpdate({ email: user_data.email }, new_user, options)
-
+                await User.findOneAndUpdate({ email: user_data.email }, new_user, options)
                 res.send(new_user)
             })
         })
@@ -75,9 +76,10 @@ auth.get('/login_callback', (req: any, res: any) => {
     }
 })
 
-auth.get('/spotify_new_access_token/:refresh_token', (req: any, res: any) => {
+auth.get('/new_access_token/:refresh_token/:email', (req: any, res: any) => {
     try {
 
+        let email = req.query.email
         let refresh_token = req.query.refresh_token
 
         fetch('https://accounts.spotify.com/api/token', {
@@ -96,19 +98,24 @@ auth.get('/spotify_new_access_token/:refresh_token', (req: any, res: any) => {
         .then((res: any) => {
             return res.json()
         })
-        .then((data: any) => {
-            res.send(data)
+        .then( async (data: any) => {
+
+            let updated_user = new User({
+                email: email,
+                access_token: data.access_token,
+                refresh_token: refresh_token
+            })
+
+            let options = {
+                upsert: true,
+                overwrite: true
+            }
+
+            await User.findOneAndUpdate({ email: email }, updated_user, options)
+            res.send(updated_user)
+
         })
         
-    }
-    catch (err) {
-        console.log(err)
-    }
-})
-
-auth.get('/logout', (req: any, res: any) => {
-    try {
-        res.send('hi')
     }
     catch (err) {
         console.log(err)
