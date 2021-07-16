@@ -1,3 +1,4 @@
+import { Message } from './models/Message';
 const express = require('express')
 const api = express.Router()
 
@@ -103,28 +104,7 @@ api.get('/top_songs/:access_token/:time_range', (req: any, res: any) => {
     catch (err) {
         console.log(err)
     }
-})
-
-// option 1: take top songs or top artists and extract genre data using some type of weighting system based on rank
-// option 2: use liked songs and extract genre data with no weights
-api.get('/top_genres', (req: any, res: any) => {
-    try {
-        res.send('hi')
-    }
-    catch (err) {
-        console.log(err)
-    }
-})
-
-// option 0: not gonna happen but ima leave the endpoint here for now just in case
-api.get('/top_subgenres/:genre', (req: any, res: any) => {
-    try {
-        res.send('hi')
-    }
-    catch (err) {
-        console.log(err)
-    }
-})
+})      
 
 // ummmmmmm... this gonna take the most work ill think about it later. lowkey gotta make sure its possible tho. otherwise i aint makin this thing
 api.get('/recommended/:genre_info', (req: any, res: any) => {
@@ -154,6 +134,22 @@ api.get('/queue/:uri', (req: any, res: any) => {
         .then(() => {
             res.send('success: song added to queue')
         })
+
+    }
+    catch (err) {
+        console.log(err)
+    }
+})
+
+// simple spotify api call
+api.post('/contact', (req: any, res: any) => {
+    try {
+
+        const message = new Message()
+        message.content = req.body.content
+        message.save()
+
+        res.send('success: message saved')
 
     }
     catch (err) {

@@ -1,4 +1,4 @@
-//const express = require('express')
+const express = require('express')
 import mongoose from 'mongoose'
 import { User } from './models/User';
 const auth = express.Router()
@@ -100,19 +100,12 @@ auth.get('/new_access_token/:refresh_token/:email', (req: any, res: any) => {
         })
         .then( async (data: any) => {
 
-            let updated_user = new User({
-                email: email,
-                access_token: data.access_token,
-                refresh_token: refresh_token
-            })
-
             let options = {
                 upsert: true,
-                overwrite: true
             }
 
-            await User.findOneAndUpdate({ email: email }, updated_user, options)
-            res.send(updated_user)
+            await User.findOneAndUpdate({ email: email }, { refresh_token: refresh_token }, options)
+            res.send('success: new refresh_token acquired')
 
         })
         
