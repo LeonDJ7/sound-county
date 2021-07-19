@@ -1,10 +1,10 @@
 import 'antd/dist/antd.css'
-import { Layout, Content } from 'antd'
+import { Layout } from 'antd'
 import './App.css';
 import Nav from './components/nav/Nav'
 import Main from './Main'
 
-const { Footer } = Layout;
+const { Footer, Content } = Layout;
 
 function App() {
     return (
