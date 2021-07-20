@@ -1,15 +1,19 @@
 
-#nav-options-container {
-    display: flex;
+#nav-root {
+    background-color: lightgray;
 }
 
-.space {
-    flex-grow: 1;
+#nav-menu {
+    background-color: #77BD75;
+    padding: 4px 0 4px 0;
 }
 
 .logo {
     height: 32px;
     margin: 16px;
     background: rgba(255, 255, 255, 0.3);
-  }
+}
 
+.ant-layout-sider-trigger {
+    background-color: #768761;
+}
