@@ -1,6 +1,8 @@
 import React from 'react'
+import 'antd/dist/antd.css'
 import { Button, Typography } from 'antd'
-import { UserOutlined } from '@ant-design/icons'
+import default_user_image from '../../assets/profile-white.png'
+import './Profile.css'
 
 interface Props {
     
@@ -38,15 +40,16 @@ const Profile: React.FC<Props> = (props) => {
     return (
         <span id='profile-root'>
             {   loggedIn &&
-                <span>
-                    <img id='profile-img' src={userData.image} alt=''></img>
-                    <Typography> Welcome {' ' + userData.username}</Typography>
-                    <Button onClick={logOut}> log out </Button>
+                <span id='profile-content-container'>
+                    <img id='profile-img' src={userData.image} alt={default_user_image}></img>
+                    <Typography id='profile-welcome-text'> Welcome {' ' + userData.username}</Typography>
+                    <Button id='profile-login-button' onClick={logOut}> log out </Button>
                 </span>
             }
             {   !loggedIn &&
-                <span>
-                    <Button onClick={logIn}> log in </Button>
+                <span id='profile-content-container'>
+                    <img id='profile-img' src={default_user_image} alt={default_user_image}></img>
+                    <Button id='profile-login-button' onClick={logIn}> log in </Button>
                 </span>
             }
         </span>

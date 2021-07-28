@@ -33,24 +33,20 @@ const Contact: React.FC<Props> = (props) => {
 
     return (
         <div id='contact-root'>
-            <div id='input-container'>
+            <div id='contact-input-container'>
                 { showErrorAlert && <div>
                     <Alert showIcon message={'oops... something went wrong'} type='error' />
                 </div> }
                 { showSuccessAlert && <div>
                     <Alert showIcon message={'success... thank you for your feedback!'} type='success' />
                 </div> }
-                <div>
-                    <TextArea onChange={(e) => { setMessage(e.target.value) }} autoSize={{ minRows: 4, maxRows: 8 }} id='messageInput' placeholder='message'/>
-                </div>
-                <div>
-                    <Button onClick={submit} type='primary' > send </Button>
-                </div>
+                <TextArea id='contact-input' onChange={(e) => { setMessage(e.target.value) }} autoSize={{ minRows: 8, maxRows: 20}} placeholder='message'/>
+                
+                <Button id='contact-send-button' onClick={submit} > send </Button>
+                
             </div>
-            <span>
-                <Typography >
-                    Have any idea as to how we could improve? Let us know!
-                </Typography>
+            <span className='contact-text'>
+                Have any idea as to how we could improve? Let us know!
             </span>
         </div>
     )

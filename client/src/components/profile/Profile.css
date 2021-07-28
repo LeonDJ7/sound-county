@@ -1,11 +1,28 @@
 #project-root {
+    align-self: center;
+}
+
+#profile-img {
+    width: 200px;
+    height: 200px;
+}  
+
+#profile-welcome-text {
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+#profile-login-button {
+    border: none;
+    background-color: #77BD75;
+    width: 120px;
+}
+
+#profile-content-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 1rem;
-}
-
-#profile-image {
-    width: 100px;
-    height: 100px;
+    align-items: center;
+    gap: 2rem;
+    margin-top: 12%;
 }

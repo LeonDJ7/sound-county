@@ -2,4 +2,32 @@
   text-align: center;
 }
 
+* {
+  font-family: "Poppins";
+  color: white;
+  font-size: 16px;
+}
+
+#nav-root {
+  background-color: lightgray;
+}
+
+#nav-menu {
+  background-color: #77BD75;
+  padding: 4px 0 4px 0;
+}
+
+.logo {
+  height: 32px;
+  margin: 16px;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.ant-layout-sider-trigger {
+  background-color: #768761;
+}
+
+.ant-menu-vertical .ant-menu-item::after, .ant-menu-vertical-left .ant-menu-item::after, .ant-menu-vertical-right .ant-menu-item::after, .ant-menu-inline .ant-menu-item::after {
+  border-right: 3px solid #768761;
+}
 
