@@ -4,8 +4,19 @@
 
 * {
   font-family: "Poppins";
-  color: white;
   font-size: 16px;
+}
+
+a:hover {
+  color: #77BD75;
+}
+
+a {
+  color: #768761;
+}
+
+div {
+  color: white;
 }
 
 #nav-root {
@@ -23,6 +34,14 @@
   background: rgba(255, 255, 255, 0.3);
 }
 
+.content {
+  display: flex;
+  flex-direction: column;
+  margin: 16px 16px 0px 16px;
+  background-color: #454545;
+  color: white;
+}
+
 .ant-layout-sider-trigger {
   background-color: #768761;
 }
@@ -30,4 +49,28 @@
 .ant-menu-vertical .ant-menu-item::after, .ant-menu-vertical-left .ant-menu-item::after, .ant-menu-vertical-right .ant-menu-item::after, .ant-menu-inline .ant-menu-item::after {
   border-right: 3px solid #768761;
 }
+
+.ant-menu-item-selected a:hover {
+  color: #768761 !important;
+}
+
+.ant-menu-item a {
+  color:white !important;
+}
+
+.ant-menu-item a:hover {
+  color: #768761 !important;
+}
+
+.ant-menu-item-selected a {
+  color: #768761 !important;
+}
+
+.default-button {
+  border: none;
+  background-color: #77BD75;
+  color: whitesmoke;
+}
+
+
 

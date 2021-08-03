@@ -23,28 +23,28 @@ const App = () => {
                 <Menu id='nav-menu' theme='light' defaultSelectedKeys={['3']} mode="inline">
 
                     <Menu.Item key="1" >
-                        <NavLink className='nav-option-title' to='/statistics'>
+                        <NavLink to='/discover'>
+                            <SlidersOutlined />
+                            <span> Discover </span>
+                        </NavLink>
+                    </Menu.Item>
+
+                    <Menu.Item key="2" >
+                        <NavLink to='/statistics'>
                             <BarChartOutlined />
                             <span> Statistics </span>
                         </NavLink>
                     </Menu.Item>
 
-                    <Menu.Item key="2" >
-                        <NavLink className='nav-option-title' to='/recommended'>
-                            <SlidersOutlined />
-                            <span> Recommended </span>
-                        </NavLink>
-                    </Menu.Item>
-
-                    <Menu.Item key="3" >
-                        <NavLink className='nav-option-title' to='/'>
+                    <Menu.Item className='nav-menu-item' key="3" >
+                        <NavLink to='/'>
                             <UserOutlined />
                             <span> Profile </span>
                         </NavLink>
                     </Menu.Item>
 
                     <Menu.Item key="4" >
-                        <NavLink className='nav-option-title' to='/contact'>
+                        <NavLink to='/contact'>
                             <MailOutlined />
                             <span> Contact </span>
                         </NavLink>
@@ -54,7 +54,7 @@ const App = () => {
             </Sider>
 
             <Layout> 
-                <Content style={{ display: 'flex', flexDirection: 'column', margin: '16px 16px 0px 16px', backgroundColor: '#454545' }}>
+                <Content className='content'>
                     <Main />
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>

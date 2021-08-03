@@ -3,6 +3,7 @@
     width: 45%;
     height: 40vh;
     min-height: 100px;
+    border-radius: 5px;
     overflow: auto;
 }
 
@@ -29,16 +30,25 @@
 .list-text {
     color: #768761;
     font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.list-subtext {
+    color: #77BD75;
+    font-weight: 600;
+    font-size: 0.8rem;
 }
 
 .list-icon {
     height: 2rem;
     width: 2rem;
-    margin-right: 3%;
+    margin-right: 1rem;
 }
 
-.inline-info-container {
+.statistics-list-inline-info-container {
     display: flex;
     flex-direction: row;
     align-items: center;
+    overflow: scroll;
+    white-space: nowrap;
 }

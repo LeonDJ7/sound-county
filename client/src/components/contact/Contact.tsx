@@ -1,6 +1,6 @@
 import React from 'react'
 import 'antd/dist/antd.css'
-import { Button, Input, Typography, Alert } from 'antd'
+import { Button, Input, Alert } from 'antd'
 import './Contact.css'
 
 const { TextArea } = Input;
@@ -33,21 +33,25 @@ const Contact: React.FC<Props> = (props) => {
 
     return (
         <div id='contact-root'>
+            
+            <span className='contact-text'>
+                Have any idea as to how we could improve? Let us know!
+            </span>
+
             <div id='contact-input-container'>
+
                 { showErrorAlert && <div>
                     <Alert showIcon message={'oops... something went wrong'} type='error' />
                 </div> }
                 { showSuccessAlert && <div>
                     <Alert showIcon message={'success... thank you for your feedback!'} type='success' />
                 </div> }
+
                 <TextArea id='contact-input' onChange={(e) => { setMessage(e.target.value) }} autoSize={{ minRows: 8, maxRows: 20}} placeholder='message'/>
-                
-                <Button id='contact-send-button' onClick={submit} > send </Button>
+                <Button className='default-button' style={{width: '120px', marginTop: '1.5rem'}} onClick={submit} > send </Button>
                 
             </div>
-            <span className='contact-text'>
-                Have any idea as to how we could improve? Let us know!
-            </span>
+            
         </div>
     )
 }

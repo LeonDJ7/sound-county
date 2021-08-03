@@ -12,17 +12,18 @@
     font-weight: 600;
 }
 
-#profile-login-button {
-    border: none;
-    background-color: #77BD75;
-    width: 120px;
-}
-
 #profile-content-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 2rem;
-    margin-top: 12%;
+    margin-top: 15%;
+}
+
+.login-button {
+    border: none;
+    background-color: #77BD75;
+    color: whitesmoke;
+    width: 120px;
 }
