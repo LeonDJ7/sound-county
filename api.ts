@@ -1,6 +1,13 @@
+import spotifyWebApi from 'spotify-web-api-node';
 import { Message } from './models/Message';
 const express = require('express')
 const api = express.Router()
+
+const credentials = {
+    clientId: process.env.CLIENT_SECRET,
+    clientSecret: process.env.CLIENT_ID,
+    redirectUri: process.env.SPOTIFY_REDIRECT_URI,
+}
 
 // gets 50 top artists for user, basic spotify api call
 api.get('/top_artists/:access_token/:time_range', (req: any, res: any) => {
@@ -106,11 +113,41 @@ api.get('/top_genres/:access_token/:time_range', (req: any, res: any) => {
 })      
 
 // get newly released albums and recommend ones similar in taste to user
-
-// ummmmmmm... this gonna take the most work ill think about it later. lowkey gotta make sure its possible tho. otherwise i aint makin this thing
-api.get('/recommended/:genre_info', (req: any, res: any) => {
+api.get('/new_releases', (req: any, res: any) => {
     try {
-        res.send('hi')
+
+        let spotifyApi = new spotifyWebApi(credentials)
+
+        spotifyApi.getNewReleases({ limit : 50 })
+        .then((data) => {
+            console.log(data.body)
+            res.json(data.body)
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+
+    }
+    catch (err) {
+        console.log(err)
+    }
+})
+
+api.get('/user_playlists/:username', (req: any, res: any) => {
+    try {
+
+        let username = req.params.username
+
+        let spotifyApi = new spotifyWebApi(credentials)
+
+        spotifyApi.getUserPlaylists(username)
+        .then((data: any) => {
+            res.json(data.body)
+        })
+        .catch((err: any) => {
+            console.log(err)
+        })
+
     }
     catch (err) {
         console.log(err)
@@ -118,9 +155,10 @@ api.get('/recommended/:genre_info', (req: any, res: any) => {
 })
 
 // simple spotify api call
-api.get('/queue/:uri', (req: any, res: any) => {
+api.post('/queue_song', (req: any, res: any) => {
     try {
 
+        let access_code = req.query.access_code
         let uri = req.query.uri
 
         fetch('https://api.spotify.com/v1/me/player/queue', {

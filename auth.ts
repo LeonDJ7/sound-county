@@ -1,80 +1,76 @@
 const express = require('express')
 import mongoose from 'mongoose'
+import spotifyWebApi from "spotify-web-api-node";
 import { User } from './models/User';
 const auth = express.Router()
 
-auth.get('/log_in', (req: any, res: any) => {
-    try {
-        var scopes = 'user-read-private user-read-email';
-        res.redirect('https://accounts.spotify.com/authorize' +
-        '?response_type=code' +
-        '&client_id=' +  process.env.SPOTIFY_CLIENT_ID +
-        (scopes ? '&scope=' + encodeURIComponent(scopes) : '') +
-        '&redirect_uri=' + encodeURIComponent(process.env.SPOTIFY_REDIRECT_URI as string));
-    }
-    catch (err) {
-        console.log(err)
-    }
-})
+const credentials = {
+    clientId: process.env.CLIENT_SECRET,
+    clientSecret: process.env.CLIENT_ID,
+    redirectUri: process.env.SPOTIFY_REDIRECT_URI,
+}
 
-auth.get('/log_in_callback', (req: any, res: any) => {
+let spotifyApi = new spotifyWebApi(credentials)
+
+auth.get('/login', (req: any, res: any) => {
     try {
 
-        let code = req.query.code
-        let state = req.query.state
+        //  Get the "code" value posted from the client-side and get the user's accessToken from the spotify api     
+        const code = req.body.code
 
-        fetch('https://accounts.spotify.com/api/token', {
-            method: 'POST',
-            headers: {
-                //'Content-Type': 'application/json',
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: JSON.stringify({
-                grant_type: 'authorization_code',
-                code: code,
-                redirect_uri: process.env.SPOTIFY_REDIRECT_URI,
-                client_id: process.env.CLIENT_ID,
-                client_secret: process.env.CLIENT_SECRET,
-            })
+        // Retrieve an access token
+        spotifyApi.authorizationCodeGrant(code).then((data: any) => {
+
+            // Returning the User's AccessToken in the json formate  
+            res.json({
+                access_token: data.body.access_token,
+                refresh_token: data.body.refresh_token,
+                expires_in: data.body.refresh_token
+            }) 
         })
-        .then((res: any) => {
-            return res.json()
+        .catch((err: any) => {
+            console.log(err);
+            res.sendStatus(400)
         })
-        .then((data: any) => {
 
-            fetch('https://api.spotify.com/v1/me', {
-                headers: {
-                    'Authorization': 'Bearer ' + data.access_token
-                }
-            })
-            .then((res) => {
-                return res.json
-            })
-            .then( async (user_data: any) => {
-
-                let new_user = new User({
-                    email: user_data.email,
-                    username: user_data.display_name,
-                    image: user_data.images[0].url,
-                    access_token: data.access_token,
-                    refresh_token: data.refresh_token
-                })
-
-                let options = {
-                    upsert: true,
-                    overwrite: true
-                }
-    
-                await User.findOneAndUpdate({ email: user_data.email }, new_user, options)
-                res.send(new_user)
-            })
-        })
+        
         
     }
     catch (err) {
         console.log(err)
     }
 })
+
+/*
+        fetch('https://api.spotify.com/v1/me', {
+            headers: {
+                'Authorization': 'Bearer ' + data.access_token
+            }
+        })
+        .then((res) => {
+            return res.json
+        })
+        .then( async (user_data: any) => {
+
+            let new_user = new User({
+                email: user_data.email,
+                username: user_data.display_name,
+                image: user_data.images[0].url,
+                access_token: data.access_token,
+                refresh_token: data.refresh_token
+            })
+
+            console.log(new_user)
+
+            let options = {
+                upsert: true,
+                overwrite: true
+            }
+
+            await User.findOneAndUpdate({ email: user_data.email }, new_user, options)
+            res.json(new_user)
+        })
+        */
 
 auth.get('/new_access_token/:refresh_token/:email', (req: any, res: any) => {
     try {
@@ -114,3 +110,5 @@ auth.get('/new_access_token/:refresh_token/:email', (req: any, res: any) => {
         console.log(err)
     }
 })
+
+module.exports = auth

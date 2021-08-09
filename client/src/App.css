@@ -66,11 +66,12 @@ div {
   color: #768761 !important;
 }
 
-.default-button {
+.default-button, .default-button:hover, .default-button:focus {
   border: none;
   background-color: #77BD75;
   color: whitesmoke;
 }
+
 
 
 
