@@ -1,0 +1,23 @@
+#playlist-expanded-root {
+    display: flex;
+    flex-direction: column;
+}
+
+#playlist-title {
+    font-size: 4rem;
+    font-weight: 800;
+}
+
+#playlist-expanded-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.playlist-img {
+    width: 15rem;
+    height: 15rem;
+    background-size: 15rem 15rem !important;
+    border: 0.1rem solid white;
+}
+

@@ -1,0 +1,10 @@
+#feature-chart-root {
+    width: 100%;
+    height: 40vh;
+    margin-top: 2rem;
+}
+
+#feature-chart {
+    width: 100%;
+    height: 100%;
+}

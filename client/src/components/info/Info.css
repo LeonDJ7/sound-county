@@ -1,0 +1,32 @@
+#info-root {
+    padding: 8% 8% 8% 8%;
+}
+
+#top-songs-info-box {
+    display: flex;
+    flex-direction: column;
+}
+
+#top-songs-lists {
+    display: flex;
+    flex-direction: row;
+    gap: 4rem;
+    height: 50vh;
+    width: 100%;
+}
+
+#playlists-box {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.playlist-img {
+    width: 15rem;
+    height: 15rem;
+    background-size: 15rem 15rem !important;
+    border: 0.1rem solid white;
+    cursor: pointer;
+}

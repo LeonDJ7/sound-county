@@ -1,45 +1,21 @@
-#recommendations-root {
-    padding: 8% 8% 8% 8%;
-}
-
-#recommendations-input-container {
-    display: flex;
-    flex-direction: column;
-}
-
-#recommendations-popularity-slider-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #9ddf9b;
-}
-
-#recommendations-refresh-button {
+#recs-refresh-button {
     background-color: #77BD75;
     color: whitesmoke;
     border: none;
     width: 120px;
     align-self: flex-end;
     margin-right: 2rem;
-    margin-top: 1rem;
+    margin-top: 3rem;
 }
 
-#recommendations-queue-all-button {
-    background-color: whitesmoke;
-    color: #77BD75 !important;
-    border: none;
-    width: 120px;
-    margin-left: 2rem;
-    margin-top: 2rem;
-}
-
-#recommended-songs-container {
+#recs-item-container {
     display: flex;
     flex-direction: column;
     padding: 2rem 2rem 2rem 2rem;
     gap: 1rem;
 }
 
-.recommendations-inline-info-container {
+.recs-inline-info-container {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -47,37 +23,68 @@
     border-radius: 5px;
 }
 
-.sub-info-container {
+.recs-sub-info-container {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
 }
 
-.list-item {
+.recs-list-item {
     width: 100%;
     height: 4rem;
     padding: 0 5% 0 5%;
 }
 
-.list-text {
+.recs-list-text {
     color: #768761;
     font-weight: 600;
     font-size: 1.2rem;
 }
 
-.list-subtext {
+.recs-list-subtext {
     color: #77BD75;
     font-weight: 600;
     font-size: 0.8rem;
 }
 
-.list-icon {
+.recs-list-icon {
     height: 2rem;
     width: 2rem;
     margin-right: 1rem;
 }
 
-.list-add-button {
+.recs-list-add-button {
     font-size: 4rem;
     font-weight: 600;
+}
+
+.recs-feature-slider {
+    width: 50%;
+    color: #768761;
+}
+
+.recs-feature-label {
+    width: 50%;
+    font-weight: 800;
+    font-size: 1.6rem;
+    color: #77BD75;
+}
+
+.ant-slider-with-marks {
+    margin-bottom: 0
+}
+
+.ant-slider-mark-text {
+    color: #A1B592;
+    font-weight: 600;
+}
+
+.ant-slider-mark-text-active {
+    color: white;
+    font-weight: 600;
+}
+
+.ant-slider-dot {
+    background-color: #768761;
+    border: none;
 }

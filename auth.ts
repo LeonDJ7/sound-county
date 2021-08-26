@@ -1,39 +1,36 @@
 const express = require('express')
-import mongoose from 'mongoose'
+import * as dotenv from "dotenv";
 import spotifyWebApi from "spotify-web-api-node";
-import { User } from './models/User';
 const auth = express.Router()
+dotenv.config();
 
 const credentials = {
-    clientId: process.env.CLIENT_SECRET,
-    clientSecret: process.env.CLIENT_ID,
+    clientId: process.env.SPOTIFY_CLIENT_ID,
+    clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
     redirectUri: process.env.SPOTIFY_REDIRECT_URI,
 }
-
-let spotifyApi = new spotifyWebApi(credentials)
 
 auth.get('/login', (req: any, res: any) => {
     try {
 
         //  Get the "code" value posted from the client-side and get the user's accessToken from the spotify api     
-        const code = req.body.code
+        const code = req.query.code
+
+        let spotifyApi = new spotifyWebApi(credentials)
 
         // Retrieve an access token
-        spotifyApi.authorizationCodeGrant(code).then((data: any) => {
+        spotifyApi.authorizationCodeGrant(code)
+            .then((data: any) => {
 
-            // Returning the User's AccessToken in the json formate  
-            res.json({
-                access_token: data.body.access_token,
-                refresh_token: data.body.refresh_token,
-                expires_in: data.body.refresh_token
-            }) 
-        })
-        .catch((err: any) => {
-            console.log(err);
-            res.sendStatus(400)
-        })
-
-        
+                // Returning the User's AccessToken in the json formate  
+                res.json({
+                    access_token: data.body.access_token,
+                    refresh_token: data.body.refresh_token,
+                }) 
+            })
+            .catch((err: any) => {
+                res.send(err, 400)
+            })
         
     }
     catch (err) {
@@ -41,73 +38,37 @@ auth.get('/login', (req: any, res: any) => {
     }
 })
 
-/*
-        fetch('https://api.spotify.com/v1/me', {
-            headers: {
-                'Authorization': 'Bearer ' + data.access_token
-            }
-        })
-        .then((res) => {
-            return res.json
-        })
-        .then( async (user_data: any) => {
-
-            let new_user = new User({
-                email: user_data.email,
-                username: user_data.display_name,
-                image: user_data.images[0].url,
-                access_token: data.access_token,
-                refresh_token: data.refresh_token
-            })
-
-            console.log(new_user)
-
-            let options = {
-                upsert: true,
-                overwrite: true
-            }
-
-            await User.findOneAndUpdate({ email: user_data.email }, new_user, options)
-            res.json(new_user)
-        })
-        */
-
-auth.get('/new_access_token/:refresh_token/:email', (req: any, res: any) => {
+auth.get('/refresh_access_token', async (req: any, res: any) => {
     try {
-
-        let email = req.query.email
         let refresh_token = req.query.refresh_token
 
-        fetch('https://accounts.spotify.com/api/token', {
-            method: 'POST',
-            headers: {
-                //'Content-Type': 'application/json',
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: JSON.stringify({
-                grant_type: 'refresh_token',
-                refresh_token: refresh_token,
-                client_id: process.env.CLIENT_ID,
-                client_secret: process.env.CLIENT_SECRET,
-            })
-        })
-        .then((res: any) => {
-            return res.json()
-        })
-        .then( async (data: any) => {
-
-            let options = {
-                upsert: true,
-            }
-
-            await User.findOneAndUpdate({ email: email }, { refresh_token: refresh_token }, options)
-            res.send('success: new refresh_token acquired')
-
-        })
+        var spotifyApi = new spotifyWebApi(credentials)
+        spotifyApi.setRefreshToken(refresh_token)
         
+        let data = await spotifyApi.refreshAccessToken()
+
+        res.json({
+            access_token: data.body.access_token
+        })
     }
     catch (err) {
-        console.log(err)
+        res.status(400).send('something went wrong')
+    }
+})
+
+auth.get('/get_me', async (req: any, res: any) => {
+    try {
+        let access_token = req.query.access_token
+        var spotifyApi = new spotifyWebApi(credentials)
+        spotifyApi.setAccessToken(access_token)
+
+        let data = await spotifyApi.getMe()
+        res.json({ 
+            me: data.body
+        })
+    }
+    catch (err) {
+        res.status(400).send('something went wrong')
     }
 })
 

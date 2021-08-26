@@ -2,6 +2,7 @@ import React from 'react'
 import 'antd/dist/antd.css'
 import { Button, Input, Alert } from 'antd'
 import './Contact.css'
+import config from '../../config'
 
 const { TextArea } = Input;
 
@@ -11,24 +12,27 @@ interface Props {
 const Contact: React.FC<Props> = (props) => {
 
     const [message, setMessage] = React.useState('')
-    const [showErrorAlert, setShowErrorAlert] = React.useState<boolean>(false)
-    const [showSuccessAlert, setShowSuccessAlert] = React.useState<boolean>(false)
+    const [show_error_alert, set_show_error_alert] = React.useState<boolean>(false)
+    const [show_success_alert, set_show_success_alert] = React.useState<boolean>(false)
 
     const submit = () => {
-        fetch('/contact', {
-            method: 'POST',
-            body: JSON.stringify({
-                content: message
+        
+        window.Email.send({
+            Host : "smtp.gmail.com",
+            Username : 'leondjust7@gmail.com',
+            Password: config.GMAIL_PASSWORD,
+            To : 'leondjust7@gmail.com',
+            From : 'leondjust7@gmail.com',
+            Subject : 'new sound county message',
+            Body : message,
+        })
+            .then( (message: any) => {
+                set_show_success_alert(true)
+                console.log(message)
+            }).catch( (err: Error) => {
+                set_show_error_alert(true)
+                console.log(err)
             })
-        })
-        .then(() => {
-            setShowSuccessAlert(true)
-            setShowErrorAlert(false)
-        })
-        .catch(() => {
-            setShowSuccessAlert(false)
-            setShowErrorAlert(true)
-        })
     }
 
     return (
@@ -40,10 +44,10 @@ const Contact: React.FC<Props> = (props) => {
 
             <div id='contact-input-container'>
 
-                { showErrorAlert && <div>
+                { show_error_alert && <div style={{marginBottom: '1rem'}}>
                     <Alert showIcon message={'oops... something went wrong'} type='error' />
                 </div> }
-                { showSuccessAlert && <div>
+                { show_success_alert && <div style={{marginBottom: '1rem'}}>
                     <Alert showIcon message={'success... thank you for your feedback!'} type='success' />
                 </div> }
 

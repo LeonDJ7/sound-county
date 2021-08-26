@@ -5,11 +5,13 @@
 #profile-img {
     width: 200px;
     height: 200px;
+    border-radius: 50%;
 }  
 
 #profile-welcome-text {
     font-size: 2rem;
     font-weight: 600;
+    color: #768761;
 }
 
 #profile-content-container {

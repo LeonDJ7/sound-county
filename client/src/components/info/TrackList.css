@@ -1,0 +1,59 @@
+#track-list-root {
+    width: 46%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.track-list-container {
+    min-height: 100px;
+    overflow: scroll;
+}
+
+.track-list-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 70%;
+    min-height: 3.4rem;
+    margin-left: 30%;
+    margin-bottom: 2rem;
+    background-color: #77BD75;
+    border-radius: 5px;
+    font-weight: 800;
+    font-size: 1.6rem;
+}
+
+.track-list-item {
+    width: 100%;
+    padding: 0.5rem 2rem 0.5rem 0rem;
+    border-bottom: 0.1rem solid white;
+}
+
+.track-list-text {
+    color: #a5b98b;
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.track-list-subtext {
+    color: #77BD75;
+    font-weight: 600;
+    font-size: 0.8rem;
+}
+
+.track-list-icon {
+    height: 2rem;
+    width: 2rem;
+    margin-right: 1rem;
+    margin-left: 1rem;
+    border-radius: 10%;
+}
+
+.track-list-inline-info-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    overflow: scroll;
+    white-space: nowrap;
+}

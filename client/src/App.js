@@ -20,30 +20,23 @@ const App = () => {
         <Layout className='App' style={{ minHeight: '100vh' }}>
             <Sider id='nav-root' collapsible collapsed={collapsed} onCollapse={onCollapse}>
                 <img className="logo" src='' alt='' />
-                <Menu id='nav-menu' theme='light' defaultSelectedKeys={['3']} mode="inline">
+                <Menu id='nav-menu' theme='light' defaultSelectedKeys={['1']} mode="inline">
 
                     <Menu.Item key="1" >
-                        <NavLink to='/discover'>
+                        <NavLink to='/'>
                             <SlidersOutlined />
                             <span> Discover </span>
                         </NavLink>
                     </Menu.Item>
 
                     <Menu.Item key="2" >
-                        <NavLink to='/statistics'>
-                            <BarChartOutlined />
-                            <span> Statistics </span>
-                        </NavLink>
-                    </Menu.Item>
-
-                    <Menu.Item className='nav-menu-item' key="3" >
-                        <NavLink to='/'>
+                        <NavLink to='/profile'>
                             <UserOutlined />
                             <span> Profile </span>
                         </NavLink>
                     </Menu.Item>
 
-                    <Menu.Item key="4" >
+                    <Menu.Item key="3" >
                         <NavLink to='/contact'>
                             <MailOutlined />
                             <span> Contact </span>
@@ -58,7 +51,7 @@ const App = () => {
                     <Main />
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>
-                    created by <a href='https://github.com/LeonDJ7'>Jared Dye</a>, <a href='https://github.com/LeonDJ7'>Leon Djusberg</a>, and <a href='https://github.com/adamgilbert912'>Adam Gilbert</a>
+                    created by <a href='https://leondj7.github.io/personal-website/'>Leon Djusberg</a>
                 </Footer>
             </Layout>
 

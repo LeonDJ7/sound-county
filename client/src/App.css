@@ -19,6 +19,16 @@ div {
   color: white;
 }
 
+span.anticon.anticon-info-circle svg {
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+span.anticon.anticon-robot svg {
+  width: 2rem;
+  height: 2rem;
+}
+
 #nav-root {
   background-color: lightgray;
 }
