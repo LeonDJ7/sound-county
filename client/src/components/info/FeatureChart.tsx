@@ -1,95 +1,33 @@
 import React from 'react'
 import 'antd/dist/antd.css'
-import { Alert, Spin } from 'antd'
+import { Alert } from 'antd'
 import './FeatureChart.css'
 import { Chart, ChartConfiguration, ChartData } from 'chart.js'
 import { refresh_access_token } from '../../tools'
 
 
 interface Props {
-    set_feature_data?: React.Dispatch<any>
-    playlist_items?: any[],
+    feature_data: any
     type: number
 }
 const FeatureChart: React.FC<Props> = (props) => {
 
     let type = props.type
+    let feature_data = props.feature_data
 
-    const [loading, set_loading] = React.useState(false)
     const [show_error_alert, set_show_error_alert] = React.useState<boolean>(false)
 
     React.useEffect(() => {
 
-        get_songs()
-
-    }, []);
-
-
-    const get_songs = () => {
-
-        set_loading(true)
-        let access_token = window.localStorage.getItem('access_token')
-
-        if (type === 1) {
-
-            fetch(`http://localhost:4000/api/top_songs?access_token=${access_token}&time_range=short_term`)
-            .then((res: any) => res.json())
-            .then((data: any[]) => {
-                load_chart(data)
-            })
-            .catch( async (err: any) => {
-                await refresh_access_token()
-                access_token = window.localStorage.getItem('access_token')
-                fetch(`http://localhost:4000/api/top_songs?access_token=${access_token}&time_range=short_term`)
-                .then((res: any) => res.json())
-                .then((data: any[]) => {
-                    load_chart(data)
-                })
-                .catch((err: any) => {
-                    // okay now give up, figure out how to handle
-                    set_loading(false)
-                    set_show_error_alert(true)
-                    console.log(err)
-                })
-            })
-
-        } else {
-
-            if (props.playlist_items) { console.log(props.playlist_items); load_chart(props.playlist_items) }
-
+        try {
+            set_up_chart(feature_data)
         }
+        catch (err: any) {
+            set_show_error_alert(true)
+        }
+        
 
-    }
-
-    const load_chart = (songs: any[]) => {
-
-        let access_token = window.localStorage.getItem('access_token')
-
-        fetch(`http://localhost:4000/api/average_audio_features?access_token=${access_token}&songs=${songs.map((song: any) => song.track.id)}`)
-        .then((res: any) => res.json())
-        .then((data: any) => {
-            console.log(data)
-            if (props.set_feature_data) props.set_feature_data(data)
-            set_up_chart(data)
-        })
-        .catch( async (err: Error) => {
-            await refresh_access_token()
-            access_token = window.localStorage.getItem('access_token')
-            fetch(`http://localhost:4000/api/average_audio_features?access_token=${access_token}&songs=${songs.map((song: any) => song.track.id)}`)
-            .then((res: any) => res.json())
-            .then((data: any) => {
-                console.log(data)
-                if (props.set_feature_data) props.set_feature_data(data)
-                set_up_chart(data)
-            })
-            .catch( async (err: Error) => {
-                set_loading(false)
-                set_show_error_alert(true)
-                console.log(err)
-            })
-        })
-
-    }
+    }, [])
 
     const set_up_chart = (feature_data: any) => {
 
@@ -147,7 +85,7 @@ const FeatureChart: React.FC<Props> = (props) => {
 
             { type === 1 && <canvas id='top-chart'></canvas> }
             { type === 2 && <canvas id='playlist-chart'></canvas> }
-            
+
         </div>
     )
 }

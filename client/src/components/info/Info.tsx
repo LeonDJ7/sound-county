@@ -1,11 +1,12 @@
 import React from 'react'
 import './Info.css'
 import 'antd/dist/antd.css'
-import { Button, Spin } from 'antd'
-import { refresh_access_token } from '../../tools'
+import { Button, Alert } from 'antd'
+import { get_feature_data, refresh_access_token } from '../../tools'
 import TrackList from './TrackList'
 import FeatureChart from './FeatureChart'
 import PlaylistExpanded from './PlaylistExpanded'
+import { Link } from 'react-router-dom'
 
 interface Props {
     
@@ -13,10 +14,16 @@ interface Props {
 const Info: React.FC<Props> = (props) => {
 
     const [logged_in, set_logged_in] = React.useState<boolean>(false)
-    const [loading, set_loading] = React.useState<boolean>(false)
     const [user_playlists, set_user_playlists] = React.useState<any[]>([])
-    const [selected_playlist, set_selected_playlist] = React.useState<any>({})
     const [top_songs, set_top_songs] = React.useState<any[]>([])
+    const [top_songs_feature_data, set_top_songs_feature_data] = React.useState<any[]>([])
+    const [top_artists, set_top_artists] = React.useState<any[]>([])
+    const [top_songs_error, set_top_songs_error] = React.useState<boolean>(false)
+    const [top_artists_loading, set_top_artists_loading] = React.useState<boolean>(false)
+    const [top_songs_loading, set_top_songs_loading] = React.useState<boolean>(false)
+    const [top_songs_feature_data_loading, set_top_songs_feature_data_loading] = React.useState<boolean>(false)
+    const [playlists_error, set_playlists_error] = React.useState<boolean>(false)
+    const [playlists_loading, set_playlists_loading] = React.useState<boolean>(false)
 
     React.useEffect( () => {
 
@@ -24,22 +31,122 @@ const Info: React.FC<Props> = (props) => {
 
         if (stored_id) {
             set_logged_in(true)
+            set_top_songs_error(false)
+            set_playlists_error(false)
+            set_top_artists_loading(true)
+            set_top_songs_feature_data_loading(true)
+            set_top_songs_loading(true)
+            set_playlists_loading(true)
+            get_top_songs()
             get_user_playlists()
+            get_top_artists()
         }
 
     }, []);
+
+
+    const get_top_artists = () => {
+
+        let access_token = window.localStorage.getItem('access_token')
+
+        fetch(`http://localhost:4000/api/top_artists?access_token=${access_token}&time_range=short_term`)
+        .then((res: any) => res.json())
+        .then((data: any[]) => {
+            set_top_artists(data)
+            set_top_artists_loading(false)
+        })
+        .catch( async (err: any) => {
+            await refresh_access_token()
+            access_token = window.localStorage.getItem('access_token')
+            fetch(`http://localhost:4000/api/top_artists?access_token=${access_token}&time_range=short_term`)
+            .then((res: any) => res.json())
+            .then((data: any[]) => {
+                set_top_artists(data)
+                set_top_artists_loading(false)
+            })
+            .catch((err: any) => {
+                console.log(err)
+                set_top_songs_error(true)
+                set_top_artists_loading(false)
+            })
+        })
+
+    }
+
+    const get_top_songs = () => {
+
+        let access_token = window.localStorage.getItem('access_token')
+
+        fetch(`http://localhost:4000/api/top_tracks?access_token=${access_token}&time_range=short_term`)
+        .then((res: any) => res.json())
+        .then((data: any[]) => {
+            set_top_songs(data)
+            set_top_songs_loading(false)
+
+            get_feature_data(data)
+            .then((feature_data) => {
+                set_top_songs_feature_data(feature_data)
+                set_top_songs_feature_data_loading(false)
+            })
+            .catch( async (err) => {
+                await refresh_access_token()
+                get_feature_data(data)
+                .then((feature_data) => {
+                    set_top_songs_feature_data(feature_data)
+                    set_top_songs_feature_data_loading(false)
+                })
+                .catch( async (err) => {
+                    console.log(err)
+                    set_top_songs_feature_data_loading(false)
+                })
+            })
+
+        })
+        .catch( async (err: any) => {
+            await refresh_access_token()
+            access_token = window.localStorage.getItem('access_token')
+            fetch(`http://localhost:4000/api/top_tracks?access_token=${access_token}&time_range=short_term`)
+            .then((res: any) => res.json())
+            .then((data: any[]) => {
+                console.log(data)
+                set_top_songs(data)
+                set_top_songs_loading(false)
+
+                get_feature_data(data)
+                .then((feature_data) => {
+                    set_top_songs_feature_data(feature_data)
+                    set_top_songs_feature_data_loading(false)
+                })
+                .catch( async (err) => {
+                    await refresh_access_token()
+                    get_feature_data(data)
+                    .then((feature_data) => {
+                        set_top_songs_feature_data(feature_data)
+                        set_top_songs_feature_data_loading(false)
+                    })
+                    .catch( async (err) => {
+                        console.log(err)
+                        set_top_songs_feature_data_loading(false)
+                    })
+                })
+
+            })
+            .catch((err: any) => {
+                console.log(err)
+            })
+        })
+
+    }
 
     // load user playlists
     const get_user_playlists = () => {
 
         let id = window.localStorage.getItem('id')
         let access_token = window.localStorage.getItem('access_token')
-        set_loading(true)
 
         fetch(`http://localhost:4000/api/user_playlists?access_token=${access_token}&id=${id}`)
         .then((res: any) => res.json())
         .then((data: any[]) => {
-            set_loading(false)
             set_user_playlists( data.map( (playlist: any) => {
                 return {
                     name: playlist.name,
@@ -47,6 +154,7 @@ const Info: React.FC<Props> = (props) => {
                     image: playlist.images[0]
                 }
             }))
+            set_playlists_loading(false)
         })
         .catch( async (err: any) => {
             await refresh_access_token()
@@ -54,7 +162,6 @@ const Info: React.FC<Props> = (props) => {
             fetch(`http://localhost:4000/api/user_playlists?access_token=${access_token}&id=${id}`)
             .then((res: any) => res.json())
             .then((data: any[]) => {
-                set_loading(false)
                 set_user_playlists( data.map( (playlist: any) => {
                     return {
                         name: playlist.name,
@@ -62,9 +169,12 @@ const Info: React.FC<Props> = (props) => {
                         image: playlist.images[0]
                     }
                 }))
+                set_playlists_loading(false)
             })
             .catch((err: any) => {
                 console.log(err)
+                set_playlists_loading(false)
+                set_playlists_error(true)
             })
         })
         
@@ -77,32 +187,48 @@ const Info: React.FC<Props> = (props) => {
 
                 <span>
 
-                    { !selected_playlist['name'] && 
+                    { top_songs_error && 
+                        <div style={{marginBottom: '1rem'}}>
+                            <Alert showIcon message={'oops... something went wrong retrieving your top artists and songs'} type='error' />
+                        </div> 
+                    }
+
+                    {!top_songs_error && 
                         <span id='top-songs-info-box'> 
                             <span id='top-songs-lists'>
-                                <TrackList type='Top Songs' list_id={1} />
-                                <TrackList type='Top Artists' list_id={2} />
+                                <TrackList type='Top Songs' list_id={1} data={top_songs} loading={top_songs_loading}/>
+                                <TrackList type='Top Artists' list_id={2} data={top_artists} loading={top_artists_loading}/>
                             </span>
-                            <FeatureChart type={1}/>
+                            <FeatureChart feature_data={top_songs_feature_data} type={1}/>
                         </span>
                     }
 
-                    { !selected_playlist['name'] && 
+                    { playlists_error && 
+                        <div style={{marginBottom: '1rem'}}>
+                            <Alert showIcon message={'oops... something went wrong retrieving your playlists'} type='error' />
+                        </div> 
+                    }
+
+                    { !playlists_error && 
                         <span id='playlists-box' >
 
                             { user_playlists.map((playlist: any, i) => {
                                 return (
-                                    <button key={i} onClick={() => { set_selected_playlist(playlist)}} className='playlist-img' style={{ background: `url(${playlist.image ? playlist.image.url : ''})`}}>
-                                        <span style={{backgroundColor: 'white', color: 'dimgray', padding: '0 0.5rem 0 0.5rem'}}> {playlist.name} </span>
-                                    </button>
+                                    <Link key={i} to={{
+                                        pathname: `/playlists/${playlist.id}`,
+                                        state: {
+                                            playlist_info: playlist,
+                                        }
+                                    }}>
+                                        <button className='playlist-img' style={{ background: `url(${playlist.image ? playlist.image.url : ''})`}}>
+                                            <span style={{backgroundColor: 'white', color: 'dimgray', padding: '0 0.5rem 0 0.5rem'}}> {playlist.name} </span>
+                                        </button>
+                                    </Link>
+                                    
                                 )
                             }) }
                             
                         </span>
-                    }
-
-                    { selected_playlist['name'] && 
-                        <PlaylistExpanded playlist_info={selected_playlist} set_selected_playlist={set_selected_playlist} />
                     }
 
                 </span>

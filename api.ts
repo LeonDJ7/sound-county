@@ -54,11 +54,34 @@ api.get('/discover', async (req: any, res: any) => {
 
         let access_token = req.query.access_token
         let seeds = req.query.seeds
+        let feature_targets = req.query.feature_targets
 
-        console.log(seeds)
+        seeds = seeds.split(',')
 
         let spotifyApi = new spotifyWebApi(credentials)
         spotifyApi.setAccessToken(access_token)
+
+        let recs = await spotifyApi.getRecommendations({
+            limit: 8,
+            seed_tracks: seeds,
+            target_danceability: feature_targets.danceability,
+            target_energy: feature_targets.energy,
+            target_valence: feature_targets.valence,
+            target_liveness: feature_targets.liveness,
+            target_instrumentalness: feature_targets.instrumentalness,
+            target_acousticness: feature_targets.acousticness,
+            target_speechiness: feature_targets.speechiness
+        })
+
+        res.json(recs.body.tracks.map((item: any) => {
+            return {
+                album: item.album,
+                artists: item.artists,
+                id: item.id,
+                name: item.name,
+                href: item.href
+            }
+        }))
 
     }
     catch (err) {
@@ -73,12 +96,10 @@ api.get('/average_audio_features', async (req: any, res: any) => {
         let access_token = req.query.access_token
         let songs = req.query.songs
 
-        songs = songs.split(',')
-
         let spotifyApi = new spotifyWebApi(credentials)
         spotifyApi.setAccessToken(access_token)
 
-        let data = await spotifyApi.getAudioFeaturesForTracks(songs)
+        songs = songs.split(',')
 
         let avg_features: any = {
             danceability: 0,
@@ -90,24 +111,37 @@ api.get('/average_audio_features', async (req: any, res: any) => {
             speechiness: 0
         }
 
-        data.body.audio_features.forEach((item) => {
-            avg_features['danceability'] += item.danceability
-            avg_features['energy'] += item.energy
-            avg_features['valence'] += item.valence
-            avg_features['liveness'] += item.liveness
-            avg_features['instrumentalness'] += item.instrumentalness
-            avg_features['acousticness'] += item.acousticness
-            avg_features['speechiness'] += item.speechiness
-        })
+        let total = songs.length
+        let processed = 0
+
+        while (processed !== total) {
+
+            let current_songs = songs.slice(processed, processed + 100)
+            processed = processed + current_songs.length
+
+            let data = await spotifyApi.getAudioFeaturesForTracks(current_songs)
+
+
+            data.body.audio_features.forEach((item) => {
+                avg_features.danceability += item.danceability
+                avg_features.energy += item.energy
+                avg_features.valence += item.valence
+                avg_features.liveness += item.liveness
+                avg_features.instrumentalness += item.instrumentalness
+                avg_features.acousticness += item.acousticness
+                avg_features.speechiness += item.speechiness
+            })
+            
+        }
 
         // divide by number of inputs and round to desireable decimal place
-        avg_features['danceability'] = Math.round(avg_features['danceability'] / data.body.audio_features.length * 10) / 10
-        avg_features['energy'] = Math.round(avg_features['energy'] / data.body.audio_features.length * 10) / 10
-        avg_features['valence'] = Math.round(avg_features['valence'] / data.body.audio_features.length * 10) / 10
-        avg_features['liveness'] = Math.round(avg_features['liveness'] / data.body.audio_features.length * 10) / 10
-        avg_features['instrumentalness']  = Math.round(avg_features['instrumentalness'] / data.body.audio_features.length * 10) / 10
-        avg_features['acousticness']  = Math.round(avg_features['acousticness'] / data.body.audio_features.length * 10) / 10
-        avg_features['speechiness']  = Math.round(avg_features['speechiness'] / data.body.audio_features.length * 10) / 10
+        avg_features.danceability = Math.round(avg_features.danceability / songs.length * 10) / 10
+        avg_features.energy = Math.round(avg_features.energy / songs.length * 10) / 10
+        avg_features.valence = Math.round(avg_features.valence / songs.length * 10) / 10
+        avg_features.liveness = Math.round(avg_features.liveness / songs.length * 10) / 10
+        avg_features.instrumentalness = Math.round(avg_features.instrumentalness / songs.length * 10) / 10
+        avg_features.acousticness = Math.round(avg_features.acousticness / songs.length * 10) / 10
+        avg_features.speechiness = Math.round(avg_features.speechiness / songs.length * 10) / 10
 
         console.log(avg_features)
 
@@ -115,6 +149,7 @@ api.get('/average_audio_features', async (req: any, res: any) => {
 
     }
     catch (err) {
+        console.log(err)
         res.status(400).send(err)
     }
 })

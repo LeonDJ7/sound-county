@@ -1,64 +1,104 @@
 import React from 'react'
+import {useHistory, useLocation} from "react-router-dom"
 import './PlaylistExpanded.css'
 import 'antd/dist/antd.css'
-import { } from 'antd'
-import { refresh_access_token } from '../../tools'
+import { Skeleton } from 'antd'
+import { get_feature_data, refresh_access_token } from '../../tools'
 import FeatureChart from './FeatureChart'
 import RecommendedTracks from './RecommendedTracks'
 
 interface Props {
-    playlist_info: any,
-    set_selected_playlist: React.Dispatch<any>
 }
 const PlaylistExpanded: React.FC<Props> = (props) => {
 
-    const playlist_info = props.playlist_info
+    const history = useHistory<any>()
+    const passed_data = useLocation<any>()
+    let playlist_info = passed_data.state.playlist_info
     
     const [loading, set_loading] = React.useState<boolean>(false)
     const [playlist_items, set_playlist_items] = React.useState<any[]>([])
     const [playlist_feature_data, set_playlist_feature_data] = React.useState<any>({})
 
     React.useEffect(() => {
+        get_songs()
+    }, [])
+
+    const get_songs = () => {
 
         let access_token = window.localStorage.getItem('access_token')
         set_loading(true)
 
         fetch(`http://localhost:4000/api/playlist_items?access_token=${access_token}&playlist_id=${playlist_info.id}`)
-            .then((res: any) => res.json()) 
-            .then((data: any[]) => {
-                console.log(data)
-                set_playlist_items(data)
+        .then((res: any) => res.json()) 
+        .then((data: any[]) => {
+            set_playlist_items(data)
+
+            get_feature_data(data)
+            .then((feature_data) => {
+                set_playlist_feature_data(feature_data)
                 set_loading(false)
             })
-            .catch( async (err: Error) => {
+            .catch( async (err) => {
                 await refresh_access_token()
-                access_token = window.localStorage.getItem('access_token')
-                fetch(`http://localhost:4000/api/playlist_items?access_token=${access_token}&playlist_id=${playlist_info.id}`)
-                .then((res: any) => res.json()) 
-                .then((data: any[]) => {
-                    console.log(data)
-                    set_playlist_items(data)
+                get_feature_data(data)
+                .then((feature_data) => {
+                    set_playlist_feature_data(feature_data)
                     set_loading(false)
                 })
-                .catch( async (err: Error) => {
+                .catch( async (err) => {
                     console.log(err)
                     set_loading(false)
                 })
             })
 
-    }, [])
+        })
+        .catch( async (err: Error) => {
+            await refresh_access_token()
+            access_token = window.localStorage.getItem('access_token')
+            fetch(`http://localhost:4000/api/playlist_items?access_token=${access_token}&playlist_id=${playlist_info.id}`)
+            .then((res: any) => res.json()) 
+            .then((data: any[]) => {
+                console.log(data)
+                set_playlist_items(data)
 
+                get_feature_data(data)
+                .then((feature_data) => {
+                    set_playlist_feature_data(feature_data)
+                    set_loading(false)
+                })
+                .catch( async (err) => {
+                    await refresh_access_token()
+                    get_feature_data(data)
+                    .then((feature_data) => {
+                        set_playlist_feature_data(feature_data)
+                        set_loading(false)
+                    })
+                    .catch( async (err) => {
+                        console.log(err)
+                        set_loading(false)
+                    })
+                })
+
+            })
+            .catch( async (err: Error) => {
+                console.log(err)
+                set_loading(false)
+            })
+        })
+
+    }
 
     return (
         <span id='playlist-expanded-root'>
             <span id='playlist-expanded-header'>
-                <button onClick={() => { props.set_selected_playlist({}) }} className='playlist-img' style={{ background: `url(${playlist_info.image ? playlist_info.image.url : ''})`, marginRight: '3rem'}} />
+                <button onClick={() => { history.goBack() }} className='playlist-img' style={{ background: `url(${playlist_info.image ? playlist_info.image.url : ''})`}} />
                 <span id='playlist-title'> {playlist_info.name} </span>
             </span>
 
-            { !loading && <FeatureChart set_feature_data={set_playlist_feature_data} playlist_items={playlist_items} type={2} /> }
+            { !loading && <FeatureChart feature_data={playlist_feature_data} type={2} /> }
             { !loading && <RecommendedTracks playlist_feature_data={playlist_feature_data} playlist_items={playlist_items} /> }
 
+            { loading && <Skeleton/> }
         </span>
     )
 }

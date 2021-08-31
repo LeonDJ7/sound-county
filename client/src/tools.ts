@@ -16,3 +16,14 @@ export const refresh_access_token = async () => {
 
     return
 }
+
+export const get_feature_data = async (songs: any[]) => {
+
+    if (!songs) return
+
+    let access_token = window.localStorage.getItem('access_token')
+    let res = await fetch(`http://localhost:4000/api/average_audio_features?access_token=${access_token}&songs=${songs[0].track ? songs.map((song: any) => song.track.id) : songs.map((song: any) => song.id)}`)
+    let data = await res.json()
+    return data
+
+}
