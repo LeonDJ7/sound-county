@@ -1,6 +1,6 @@
 import React from 'react'
 import 'antd/dist/antd.css'
-import { Button, Spin, Typography } from 'antd'
+import { Button, Skeleton, Typography } from 'antd'
 import default_user_image from '../../assets/profile-white.png'
 import './Profile.css'
 import { login_url } from '../../spotify'
@@ -23,6 +23,7 @@ const Profile: React.FC<Props> = (props) => {
 
         if (code) {
 
+            console.log('test')
             set_loading(true)
 
             fetch(`http://localhost:4000/auth/login?code=${code}`)
@@ -33,12 +34,12 @@ const Profile: React.FC<Props> = (props) => {
                 let refresh_token = data.refresh_token
 
                 if (!access_token) {
-                    window.location.href = '/'
+                    window.location.href = '/profile'
                     return;
                 }
 
                 // If success then cut the code string from the URL and execute the other thing
-                window.history.pushState({}, '', '/')
+                window.history.pushState({}, '', '/profile')
                 window.localStorage.setItem('access_token', access_token)
                 window.localStorage.setItem('refresh_token', refresh_token)
 
@@ -95,11 +96,14 @@ const Profile: React.FC<Props> = (props) => {
                     <Button className='default-button' style={{width: '120px'}} onClick={log_out}>
                         <a href={login_url}>log in</a>
                     </Button>
-                    
                 </span>
             }
 
-            { loading && <Spin></Spin> }
+            { loading && 
+                <span style={{ display: 'flex', width: '100%', height: '100%', padding: '4rem 4rem 4rem 4rem'}}>
+                    <Skeleton /> 
+                </span>
+            }
 
         </span>
     )

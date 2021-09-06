@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { SyntheticEvent } from 'react'
 import 'antd/dist/antd.css'
-import { Spin, Slider, Button, Alert } from 'antd'
+import { Switch, Slider, Button, Alert, Skeleton } from 'antd'
 import './RecommendedTracks.css'
 import { refresh_access_token } from '../../tools'
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
 
 interface Props {
     playlist_feature_data: any
@@ -12,9 +13,19 @@ const RecommendedTracks: React.FC<Props> = (props) => {
 
     let playlist_feature_data = props.playlist_feature_data
     let playlist_items = props.playlist_items
+    var avg_popularity = 0
+
+    playlist_items.forEach((item) => {
+        avg_popularity += item.track.popularity
+    })
+
+    avg_popularity = Math.round(avg_popularity / playlist_items.length)
 
     const [loading, set_loading] = React.useState<boolean>(false)
     const [show_error_alert, set_show_error_alert] = React.useState<boolean>(false)
+    const [show_device_error, set_show_device_error] = React.useState<boolean>(false)
+    const [use_popularity, set_use_popularity] = React.useState<boolean>(false)
+
     const [recommended_songs, set_recommended_songs] = React.useState<any[]>([])
 
     let og_danceability = playlist_feature_data.danceability
@@ -25,12 +36,14 @@ const RecommendedTracks: React.FC<Props> = (props) => {
     const [instrumentalness, set_instrumentalness] = React.useState<number>(playlist_feature_data.instrumentalness)
     const [acousticness, set_acousticness] = React.useState<number>(playlist_feature_data.acousticness)
     const [speechiness, set_speechiness] = React.useState<number>(playlist_feature_data.speechiness)
+    const [popularity, set_popularity] = React.useState<number>(avg_popularity)
 
     const recommend_songs = () => {
 
         let access_token = window.localStorage.getItem('access_token')
         set_loading(true)
         set_show_error_alert(false)
+        set_show_device_error(false)
 
         let seeds: string[] = []
 
@@ -38,37 +51,66 @@ const RecommendedTracks: React.FC<Props> = (props) => {
             seeds.push(playlist_items[Math.floor(Math.random() * playlist_items.length)].track.id)
         }
 
-        console.log(playlist_items)
-        console.log(seeds)
-
-        let feature_targets = {
+        let feature_targets: any = {
             danceability: danceability,
             energy: energy,
             valence: valence,
             liveness: liveness,
             instrumentalness: instrumentalness,
             acousticness: acousticness,
-            speechiness: speechiness
+            speechiness: speechiness,
         }
 
-        fetch(`http://localhost:4000/api/discover?access_token=${access_token}&seeds=${seeds}&feature_targets=${feature_targets}`)
+        if (use_popularity) {
+            feature_targets.popularity = popularity
+        }
+
+        fetch(`http://localhost:4000/api/discover?access_token=${access_token}&seeds=${seeds}&feature_targets=${JSON.stringify(feature_targets)}`)
         .then((res: any) => res.json())
-        .then((data: any) => {
-            console.log(data)
+        .then((data: any[] | any) => {
             set_loading(false)
             if (data.body) { set_show_error_alert(true); return }
-            set_recommended_songs(data)
+            let data_filtered = data.filter((rec: any) => {
+                return playlist_items.find(item => rec.id === item.track.id) === undefined
+            })
+            let recs = []
+
+            if (data_filtered.length > 10) {
+                for (let i = 0; i < 10; i++) {
+                    let i = Math.floor(Math.random() * data_filtered.length)
+                    recs.push(data_filtered[i])
+                    data_filtered.splice(i, 1)
+                }
+            } else {
+                recs = data_filtered
+            }
+
+            set_recommended_songs(recs)
         })
         .catch( async (err: Error) => {
             await refresh_access_token()
             access_token = window.localStorage.getItem('access_token')
             fetch(`http://localhost:4000/api/discover?access_token=${access_token}&seeds=${seeds}&feature_targets=${feature_targets}`)
             .then((res: any) => res.json())
-            .then((data: any) => {
-                console.log(data)
+            .then((data: any[] | any) => {
                 set_loading(false)
-                if (data.body) { set_show_error_alert(true); return }
-                set_recommended_songs(data)
+            if (data.body) { set_show_error_alert(true); return }
+            let data_filtered = data.filter((rec: any) => {
+                return playlist_items.find(item => rec.id === item.track.id) === undefined
+            })
+            let recs = []
+
+            if (data_filtered.length > 10) {
+                for (let i = 0; i < 10; i++) {
+                    let i = Math.floor(Math.random() * data_filtered.length)
+                    recs.push(data_filtered[i])
+                    data_filtered.splice(i, 1)
+                }
+            } else {
+                recs = data_filtered
+            }
+
+            set_recommended_songs(recs)
             })
             .catch( (err: any) => {
                 // now give up
@@ -87,32 +129,32 @@ const RecommendedTracks: React.FC<Props> = (props) => {
         return palette[random]
     }
 
-    const queue_song = (uri: string) => {
+    const queue_song = (uri: string, e: SyntheticEvent) => {
+
+        set_show_device_error(false)
+        set_show_error_alert(false)
 
         let access_token = window.localStorage.getItem('access_token')
+        let evt = e.target as HTMLElement
 
-        fetch(`http://localhost:4000/api/queue_song`, {
-            method: 'POST',
-            body: JSON.stringify({
-                access_token: access_token as string,
-                uri: uri
-            })
+        evt.style.color = '#000000'
+
+        fetch(`http://localhost:4000/api/queue_song?access_token=${access_token}&uri=${uri}`)
+        .then((res: any) => res.json())
+        .then((data: any) => {
+
+            if (data.body.error && data.body.error.reason === 'NO_ACTIVE_DEVICE') {
+                set_show_device_error(true)
+            }
+
+            setTimeout(() => {
+                evt.style.color = 'dimgrey'
+            }, 500);
+
         })
-        .catch( async (err: any) => {
-
-            await refresh_access_token()
-            access_token = window.localStorage.getItem('access_token')
-            fetch(`http://localhost:4000/api/queue_song`, {
-                method: 'POST',
-                body: JSON.stringify({
-                    access_token: access_token as string,
-                    uri: uri
-                })
-            })
-            .catch((err: any) => {
-                // okay now we give up
-                console.log(err)
-            })
+        .catch( (err: any) => {
+            set_show_error_alert(true)
+            console.log(err)
         })
         
     }
@@ -121,10 +163,8 @@ const RecommendedTracks: React.FC<Props> = (props) => {
         <React.Fragment>
 
             { og_danceability && <span style={{textAlign: 'right'}}>
-
-                <span style={{ fontSize: '2.6rem', fontWeight: 800, color: '#A1B592'}}> discover songs based on this playlist </span>
                 
-                <span style={{display: 'flex', flexDirection: 'row', textAlign: 'left', alignItems: 'center', marginTop: '4rem'}}>
+                <span style={{display: 'flex', flexDirection: 'row', textAlign: 'left', alignItems: 'center'}}>
                     <span className='recs-feature-label'>danceability</span>
                     <Slider trackStyle={{backgroundColor: '#A1B592'}} handleStyle={{border: 'none'}} className='recs-feature-slider' value={danceability} onChange={(value: number) => { set_danceability(value) }} step={0.1} max={1} marks={{[playlist_feature_data['danceability']]: `${playlist_feature_data['danceability']}`}}/>
                 </span>
@@ -159,39 +199,74 @@ const RecommendedTracks: React.FC<Props> = (props) => {
                     <Slider trackStyle={{backgroundColor: '#A1B592'}} handleStyle={{border: 'none'}} className='recs-feature-slider' value={speechiness} onChange={(value: number) => { set_speechiness(value) }} step={0.1} max={1} marks={{[playlist_feature_data['speechiness']]: `${playlist_feature_data['speechiness']}`}}/>
                 </span> 
 
-                <Button onClick={recommend_songs} id='recs-refresh-button'> refresh </Button>
+                { use_popularity &&
+                    <span style={{display: 'flex', flexDirection: 'row', textAlign: 'left', alignItems: 'center', marginTop: '2rem'}}>
+                        <span className='recs-feature-label' style={{ color: '#A6AF96', flexGrow: 0 }}>popularity</span>
+                        <span style={{flexGrow: 1}}>
+                            <Switch style={{marginLeft: '0.7rem'}} checkedChildren={<CheckOutlined />} unCheckedChildren={<CloseOutlined />} defaultChecked onChange={() => { set_use_popularity(!use_popularity) }} />
+                        </span>
+                        <Slider trackStyle={{backgroundColor: '#A6AF96' }} handleStyle={{border: 'none' }} className='recs-feature-slider' value={popularity} onChange={(value: number) => { set_popularity(value) }} step={1} max={100} marks={{[avg_popularity]: `${avg_popularity}`}}/>
+                    </span> 
+                }
 
-                { show_error_alert && <div style={{marginTop: '2rem'}}>
+                { !use_popularity &&
+                    <span style={{ display: 'flex', flexDirection: 'row', textAlign: 'left', alignItems: 'center', marginTop: '2rem'}}>
+                        <span className='recs-feature-label' style={{ color: '#A6AF96', opacity: '50%', flexGrow: 0 }}>popularity</span>
+                        <span style={{flexGrow: 1}}>
+                            <Switch style={{marginLeft: '0.7rem'}} checkedChildren={<CheckOutlined />} unCheckedChildren={<CloseOutlined />} defaultChecked={false} onChange={() => { set_use_popularity(!use_popularity) }} />
+                        </span>
+                        <Slider disabled trackStyle={{backgroundColor: '#A6AF96', opacity: '99%' }} handleStyle={{border: 'none' }} className='recs-feature-slider' value={popularity} onChange={(value: number) => { set_popularity(value) }} step={1} max={100} marks={{[avg_popularity]: `${avg_popularity}`}}/>
+                    </span> 
+                }
+                
+                <span style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '1rem'}}>
+                    <span style={{ fontWeight: 800, color: '#A1B592', flexGrow: 1}}> discover songs based on this playlist </span>
+                    <Button onClick={recommend_songs} id='recs-refresh-button'> refresh </Button>
+                </span>
+                
+
+                { show_error_alert && <div style={{ textAlign: 'center', marginTop: '2rem'}}>
                     <Alert showIcon message={'oops... something went wrong'} type='error' />
                 </div> }
 
-                { !loading && recommended_songs && 
+                { show_device_error && <div style={{ textAlign: 'center', marginTop: '2rem'}}>
+                    <Alert showIcon message={'open up spotify on your device to queue a song'} type='error' />
+                </div> }
+
+                { !loading && !show_error_alert && recommended_songs.length > 0 && recommended_songs && 
                     <span id='recs-item-container'>
                         { recommended_songs.map( (song: any, i: number) => {
                             return (
-                                <span key={i} style={{ backgroundColor: `${random_green()}`}} className='recs-inline-info-container recs-list-item'> 
-                                    <img src={song.album.images ? song.album.images[0].url : ''} alt='' className='recs-list-icon' />
-                                    <span className='recs-list-text'> {song.name} </span>
-                                    <span className='recs-sub-info-container'>
-                                        { song.artists.map( (artist: any, i: number) => {
-                                            return (
-                                                <span key={i}>
-                                                    <span className='recs'> {'|'} </span>
-                                                    <span style={{color: 'whitesmoke', marginRight: '0.2rem'}} className='recs-list-subtext'> {artist} </span>
-                                                </span>
-                                            )
-                                        })}
+                                <span key={i} style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center'}} >
+                                    <button className='queue-button' onClick={(e) => { queue_song(song.uri, e) }} style={{ backgroundSize: '12rem 12rem', background: `url(${song.album.images ? song.album.images[0].url : ''}) no-repeat center`}} >
+                                        <span className='queue-indicator'> + </span>
+                                    </button>
+                                    <span style={{width: '12rem'}} >
+                                        <div> {song.name} </div>
+                                        <span style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap'}}>
+                                            { song.artists.map((artist: string, i: number) => { return (
+                                                <span key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                                                    <span style={{ fontSize: '0.6rem', color: `${random_green()}`}}> {artist} </span>
+                                                    <span style={{ margin: '0 0.8rem 0 0.8rem'}}> {'  |  '} </span>
+                                                </span>) 
+                                            })}
+                                            { song.genres.map((genre: string, i: number) => { return (
+                                                <span key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                                                    <span style={{ fontSize: '0.6rem'}}> {genre} </span>
+                                                    <span style={{ margin: '0 0.8rem 0 0.8rem', color: `${random_green()}`}}> {'  |  '} </span>
+                                                </span>) 
+                                            })}
+                                        </span>
                                     </span>
-                                    <span onClick={() => { queue_song(song.uri) }} className='recs-list-add-button'> + </span>
                                 </span>
                             )
-                        }) }
-                    </span> 
+                        })}
+                    </span>
                 }
 
                 { loading && 
                     <span style={{ display: 'flex', alignItems: 'center' }}>
-                        <Spin size='large' style={{margin: 'auto'}}></Spin> 
+                        <Skeleton loading/>
                     </span>
                 }
 

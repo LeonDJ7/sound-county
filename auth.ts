@@ -29,7 +29,7 @@ auth.get('/login', (req: any, res: any) => {
                 }) 
             })
             .catch((err: any) => {
-                res.send(err, 400)
+                res.status(400).send(err)
             })
         
     }

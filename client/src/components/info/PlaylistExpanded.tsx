@@ -58,7 +58,6 @@ const PlaylistExpanded: React.FC<Props> = (props) => {
             fetch(`http://localhost:4000/api/playlist_items?access_token=${access_token}&playlist_id=${playlist_info.id}`)
             .then((res: any) => res.json()) 
             .then((data: any[]) => {
-                console.log(data)
                 set_playlist_items(data)
 
                 get_feature_data(data)
@@ -90,15 +89,18 @@ const PlaylistExpanded: React.FC<Props> = (props) => {
 
     return (
         <span id='playlist-expanded-root'>
-            <span id='playlist-expanded-header'>
-                <button onClick={() => { history.goBack() }} className='playlist-img' style={{ background: `url(${playlist_info.image ? playlist_info.image.url : ''})`}} />
-                <span id='playlist-title'> {playlist_info.name} </span>
-            </span>
+            <span style={{display: 'flex', flexDirection: 'row', gap: '8%'}}> 
+                <span id='playlist-expanded-header'>
+                    <span id='playlist-title'> {playlist_info.name} </span>
+                    <button onClick={() => { history.goBack() }} className='playlist-img' style={{ background: `url(${playlist_info.image ? playlist_info.image.url : ''})`}} />
+                </span>
 
-            { !loading && <FeatureChart feature_data={playlist_feature_data} type={2} /> }
+                { !loading && <FeatureChart feature_data={playlist_feature_data} type={2} /> }
+            </span>
+            
             { !loading && <RecommendedTracks playlist_feature_data={playlist_feature_data} playlist_items={playlist_items} /> }
 
-            { loading && <Skeleton/> }
+            { loading && <Skeleton loading/> }
         </span>
     )
 }

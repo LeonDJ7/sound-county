@@ -5,16 +5,20 @@
 }
 
 #playlist-title {
-    flex-grow: 1;
-    font-size: 3.5rem;
+    font-size: 1rem;
     font-weight: 800;
-    margin-left: 2rem;
+    margin-bottom: 1rem;
+    text-align: left;
 }
 
 #playlist-expanded-header {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
+    justify-content: left;
+    text-align: left;
+    align-items: flex-start;
+    margin-bottom: 2rem;
 }
 
 .playlist-img {

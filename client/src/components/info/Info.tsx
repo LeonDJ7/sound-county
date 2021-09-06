@@ -1,11 +1,10 @@
 import React from 'react'
 import './Info.css'
 import 'antd/dist/antd.css'
-import { Button, Alert } from 'antd'
+import { Button, Alert, Skeleton } from 'antd'
 import { get_feature_data, refresh_access_token } from '../../tools'
 import TrackList from './TrackList'
 import FeatureChart from './FeatureChart'
-import PlaylistExpanded from './PlaylistExpanded'
 import { Link } from 'react-router-dom'
 
 interface Props {
@@ -16,13 +15,13 @@ const Info: React.FC<Props> = (props) => {
     const [logged_in, set_logged_in] = React.useState<boolean>(false)
     const [user_playlists, set_user_playlists] = React.useState<any[]>([])
     const [top_songs, set_top_songs] = React.useState<any[]>([])
-    const [top_songs_feature_data, set_top_songs_feature_data] = React.useState<any[]>([])
+    const [top_songs_feature_data, set_top_songs_feature_data] = React.useState<any>()
     const [top_artists, set_top_artists] = React.useState<any[]>([])
     const [top_songs_error, set_top_songs_error] = React.useState<boolean>(false)
     const [top_artists_loading, set_top_artists_loading] = React.useState<boolean>(false)
     const [top_songs_loading, set_top_songs_loading] = React.useState<boolean>(false)
-    const [top_songs_feature_data_loading, set_top_songs_feature_data_loading] = React.useState<boolean>(false)
     const [playlists_error, set_playlists_error] = React.useState<boolean>(false)
+    const [top_songs_feature_data_loading, set_top_songs_feature_data_loading] = React.useState<boolean>(false)
     const [playlists_loading, set_playlists_loading] = React.useState<boolean>(false)
 
     React.useEffect( () => {
@@ -34,8 +33,8 @@ const Info: React.FC<Props> = (props) => {
             set_top_songs_error(false)
             set_playlists_error(false)
             set_top_artists_loading(true)
-            set_top_songs_feature_data_loading(true)
             set_top_songs_loading(true)
+            set_top_songs_feature_data_loading(true)
             set_playlists_loading(true)
             get_top_songs()
             get_user_playlists()
@@ -97,7 +96,6 @@ const Info: React.FC<Props> = (props) => {
                 })
                 .catch( async (err) => {
                     console.log(err)
-                    set_top_songs_feature_data_loading(false)
                 })
             })
 
@@ -108,7 +106,6 @@ const Info: React.FC<Props> = (props) => {
             fetch(`http://localhost:4000/api/top_tracks?access_token=${access_token}&time_range=short_term`)
             .then((res: any) => res.json())
             .then((data: any[]) => {
-                console.log(data)
                 set_top_songs(data)
                 set_top_songs_loading(false)
 
@@ -173,8 +170,8 @@ const Info: React.FC<Props> = (props) => {
             })
             .catch((err: any) => {
                 console.log(err)
-                set_playlists_loading(false)
                 set_playlists_error(true)
+                set_playlists_loading(false)
             })
         })
         
@@ -199,7 +196,12 @@ const Info: React.FC<Props> = (props) => {
                                 <TrackList type='Top Songs' list_id={1} data={top_songs} loading={top_songs_loading}/>
                                 <TrackList type='Top Artists' list_id={2} data={top_artists} loading={top_artists_loading}/>
                             </span>
-                            <FeatureChart feature_data={top_songs_feature_data} type={1}/>
+                            { top_songs_feature_data_loading && 
+                                <span style={{margin: '2rem 0 2rem 0'}}>
+                                    <Skeleton loading/> 
+                                </span>
+                            }
+                            { !top_songs_feature_data_loading && <FeatureChart feature_data={top_songs_feature_data} type={1}/> }
                         </span>
                     }
 
@@ -209,7 +211,13 @@ const Info: React.FC<Props> = (props) => {
                         </div> 
                     }
 
-                    { !playlists_error && 
+                    { playlists_loading && 
+                        <span style={{margin: '2rem 0 2rem 0'}}>
+                            <Skeleton />
+                        </span>
+                    }
+
+                    { !playlists_error && !playlists_loading &&
                         <span id='playlists-box' >
 
                             { user_playlists.map((playlist: any, i) => {
@@ -235,7 +243,11 @@ const Info: React.FC<Props> = (props) => {
 
             }
 
-            { !logged_in && <Button className='default-button' style={{margin: 'auto', width: '120px'}}> log in </Button> }
+            { !logged_in && 
+                <Button className='default-button' style={{margin: 'auto', width: '120px'}}> 
+                    
+                    <a href='/profile' > log in </a>
+                </Button> }
 
         </span>
     )

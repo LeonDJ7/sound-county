@@ -24,7 +24,7 @@ const TrackList: React.FC<Props> = (props) => {
                 {type}
             </div> }
 
-            { (list_id === 2) && <div className='track-list-header' style={{ backgroundColor: '#F1EC78' }}>
+            { (list_id === 2) && <div className='track-list-header' style={{ backgroundColor: '#A6AF96'}}>
                 {type}
             </div> }       
         
@@ -69,7 +69,7 @@ const TrackList: React.FC<Props> = (props) => {
 
                 { loading && 
                     <span style={{ display: 'flex', height: '80%', alignItems: 'center' }}>
-                        <Skeleton loading={true} /> 
+                        <Skeleton loading /> 
                     </span>
                 }
 

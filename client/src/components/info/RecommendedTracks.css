@@ -6,56 +6,43 @@
     align-self: flex-end;
     margin-right: 2rem;
     margin-top: 3rem;
+    margin-bottom: 3rem;
 }
 
 #recs-item-container {
     display: flex;
-    flex-direction: column;
-    padding: 2rem 2rem 2rem 2rem;
-    gap: 1rem;
-}
-
-.recs-inline-info-container {
-    display: flex;
     flex-direction: row;
-    align-items: center;
-    border-bottom: none;
-    border-radius: 5px;
+    flex-wrap: wrap;
+    padding-top: 3rem;
+    column-gap: 2rem;
+    row-gap: 2rem;
+    justify-content: center;
+    align-items:flex-start;
 }
 
-.recs-sub-info-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
+.queue-button {
+    height: 12rem;
+    width: 12rem;
+    border: none;
+    border-radius: 5%;
+    margin-bottom: 0.5rem;
+    cursor:pointer;
 }
 
-.recs-list-item {
-    width: 100%;
-    height: 4rem;
-    padding: 0 5% 0 5%;
+.queue-indicator {
+    font-weight: 500;
+    font-size: 7rem;
+    display: none;
+    margin: auto;
+    color: dimgray;
 }
 
-.recs-list-text {
-    color: #768761;
-    font-weight: 600;
-    font-size: 1.2rem;
+.queue-button:hover {
+    opacity: 50%;
 }
 
-.recs-list-subtext {
-    color: #77BD75;
-    font-weight: 600;
-    font-size: 0.8rem;
-}
-
-.recs-list-icon {
-    height: 2rem;
-    width: 2rem;
-    margin-right: 1rem;
-}
-
-.recs-list-add-button {
-    font-size: 4rem;
-    font-weight: 600;
+.queue-button:hover .queue-indicator, .queue-indicator:hover  {
+    display: block;
 }
 
 .recs-feature-slider {
@@ -64,7 +51,7 @@
 }
 
 .recs-feature-label {
-    width: 50%;
+    flex-grow: 1;
     font-weight: 800;
     font-size: 1.6rem;
     color: #77BD75;

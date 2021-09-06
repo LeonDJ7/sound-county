@@ -54,15 +54,15 @@ api.get('/discover', async (req: any, res: any) => {
 
         let access_token = req.query.access_token
         let seeds = req.query.seeds
-        let feature_targets = req.query.feature_targets
+        let feature_targets = JSON.parse(req.query.feature_targets)
 
         seeds = seeds.split(',')
 
         let spotifyApi = new spotifyWebApi(credentials)
         spotifyApi.setAccessToken(access_token)
 
-        let recs = await spotifyApi.getRecommendations({
-            limit: 8,
+        let feature_data: any = {
+            limit: 50,
             seed_tracks: seeds,
             target_danceability: feature_targets.danceability,
             target_energy: feature_targets.energy,
@@ -70,18 +70,31 @@ api.get('/discover', async (req: any, res: any) => {
             target_liveness: feature_targets.liveness,
             target_instrumentalness: feature_targets.instrumentalness,
             target_acousticness: feature_targets.acousticness,
-            target_speechiness: feature_targets.speechiness
-        })
+            target_speechiness: feature_targets.speechiness,
+        }
 
-        res.json(recs.body.tracks.map((item: any) => {
+        if (feature_targets.popularity) {
+            feature_data['target_popularity'] = feature_targets.popularity
+        }
+
+        let data = await spotifyApi.getRecommendations(feature_data)
+
+        let recs: any = data.body.tracks.map((item: any) => {
             return {
                 album: item.album,
-                artists: item.artists,
+                artists: item.artists.map((artist: any) => artist.name),
                 id: item.id,
                 name: item.name,
-                href: item.href
+                uri: item.uri
             }
-        }))
+        })
+
+        for (let i = 0; i < recs.length; i++) {
+            let rec_artist = await spotifyApi.getArtist(data.body.tracks[i].artists[0].id)
+            recs[i].genres = rec_artist.body.genres
+        }
+
+        res.json(recs)
 
     }
     catch (err) {
@@ -108,7 +121,7 @@ api.get('/average_audio_features', async (req: any, res: any) => {
             liveness: 0,
             instrumentalness: 0,
             acousticness: 0,
-            speechiness: 0
+            speechiness: 0,
         }
 
         let total = songs.length
@@ -142,8 +155,6 @@ api.get('/average_audio_features', async (req: any, res: any) => {
         avg_features.instrumentalness = Math.round(avg_features.instrumentalness / songs.length * 10) / 10
         avg_features.acousticness = Math.round(avg_features.acousticness / songs.length * 10) / 10
         avg_features.speechiness = Math.round(avg_features.speechiness / songs.length * 10) / 10
-
-        console.log(avg_features)
 
         res.json(avg_features)
 
@@ -182,28 +193,23 @@ api.get('/user_playlists', async (req: any, res: any) => {
 })
 
 // simple spotify api call
-api.post('/queue_song', (req: any, res: any) => {
+api.get('/queue_song', (req: any, res: any) => {
     try {
 
         let access_token = req.query.access_token
         let uri = req.query.uri
 
-        fetch('https://api.spotify.com/v1/me/player/queue', {
-            method: 'POST',
-            headers: {
-                Authorization: 'Bearer ' + access_token
-            },
-            body: JSON.stringify({
-                uri: uri
-            })
+        let spotifyApi = new spotifyWebApi(credentials)
+        spotifyApi.setAccessToken(access_token)
+
+        spotifyApi.addToQueue(uri)
+        .then((data: any) => {
+            console.log('success: song added to queue')
         })
-            .then(() => {
-                console.log('success: song added to queue')
-                res.send('success: song added to queue', 200)
-            })
-            .catch((err: any) => {
-                res.status(400).send(err)
-            })
+        .catch((err: any) => {
+            console.log(err)
+            res.status(400).send(err)
+        })
 
     }
     catch (err) {

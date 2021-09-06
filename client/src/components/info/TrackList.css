@@ -27,7 +27,7 @@
 .track-list-item {
     width: 100%;
     padding: 0.5rem 2rem 0.5rem 0rem;
-    border-bottom: 0.1rem solid white;
+    border-bottom: 0.1rem solid #8b8b8b;
 }
 
 .track-list-text {
