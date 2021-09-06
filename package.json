@@ -1,7 +1,11 @@
 {
-  "name": "sound-county",
+  "name": "sound-county-api",
   "version": "1.0.0",
   "description": "",
+  "engines": {
+    "node": "14.x",
+    "npm": "6.x"
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
