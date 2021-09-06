@@ -89,10 +89,10 @@ const PlaylistExpanded: React.FC<Props> = (props) => {
 
     return (
         <span id='playlist-expanded-root'>
-            <span style={{display: 'flex', flexDirection: 'row', gap: '8%'}}> 
+            <span id='playlist-expanded-info'> 
                 <span id='playlist-expanded-header'>
                     <span id='playlist-title'> {playlist_info.name} </span>
-                    <button onClick={() => { history.goBack() }} className='playlist-img' style={{ background: `url(${playlist_info.image ? playlist_info.image.url : ''})`}} />
+                    <button onClick={() => { history.goBack() }} className='playlist-expanded-img' style={{ background: `url(${playlist_info.image ? playlist_info.image.url : ''})`}} />
                 </span>
 
                 { !loading && <FeatureChart feature_data={playlist_feature_data} type={2} /> }

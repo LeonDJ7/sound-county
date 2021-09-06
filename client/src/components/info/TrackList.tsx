@@ -30,7 +30,7 @@ const TrackList: React.FC<Props> = (props) => {
         
             <div className='track-list-container'>
 
-                { !loading && data && data.map( (item, i) => {
+                { !loading && data && data.length > 0 && data.map( (item, i) => {
                     return (
                         <span key={i} className='track-list-item track-list-inline-info-container' >
                             <img src={item.image_url} alt={fake_list_icon} className='track-list-icon' />
@@ -53,7 +53,7 @@ const TrackList: React.FC<Props> = (props) => {
                                     { (list_id === 2) && item.genres.map( (genre: string, i: number) => {
                                         return (
                                             <span key={i}>
-                                                <span className='track-list-subtext'> {'|'} </span>
+                                                <span className='track-list-subtext' style={{color: 'white'}}> {'|'} </span>
                                                 <span className='track-list-subtext' style={{marginRight: '0.2rem'}}> {genre} </span>
                                             </span>
                                         )

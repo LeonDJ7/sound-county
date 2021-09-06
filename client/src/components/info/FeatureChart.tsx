@@ -33,7 +33,6 @@ const FeatureChart: React.FC<Props> = (props) => {
         Chart.defaults.color ='lightgray';
         Chart.defaults.font.size = 12
 
-        console.log(feature_data)
         set_show_error_alert(false)
 
         const chart_data: ChartData = {

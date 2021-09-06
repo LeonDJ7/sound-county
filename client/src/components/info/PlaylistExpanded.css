@@ -1,7 +1,7 @@
 #playlist-expanded-root {
     display: flex;
     flex-direction: column;
-    padding: 8% 8% 8% 8%;
+    padding: 3rem 8% 3rem 8%;
 }
 
 #playlist-title {
@@ -9,6 +9,13 @@
     font-weight: 800;
     margin-bottom: 1rem;
     text-align: left;
+}
+
+#playlist-expanded-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8%;
 }
 
 #playlist-expanded-header {
@@ -21,11 +28,30 @@
     margin-bottom: 2rem;
 }
 
-.playlist-img {
+.playlist-expanded-img {
     border-radius: 2%;
     width: 15rem;
     height: 15rem;
     background-size: 15rem 15rem !important;
     border: 0.1rem solid white;
+    overflow: auto;
 }
+
+@media only screen and (max-width: 768px) {
+
+    .playlist-expanded-img {
+        width: 10rem;
+        height: 10rem;
+        background-size: 10rem 10rem !important;
+    }
+
+    #playlist-expanded-info {
+        flex-direction: column;
+    }
+
+    #playlist-expanded-header {
+        margin-bottom: 0rem;
+    }
+
+} 
 

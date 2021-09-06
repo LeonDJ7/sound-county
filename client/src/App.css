@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  min-width: 320px;
 }
 
 * {
@@ -45,6 +46,8 @@ span.anticon.anticon-robot svg {
 }
 
 .content {
+  width: calc(100% - 2rem);
+  height: 100%;
   display: flex;
   flex-direction: column;
   margin: 16px 16px 0px 16px;
@@ -81,6 +84,53 @@ span.anticon.anticon-robot svg {
   background-color: #77BD75;
   color: whitesmoke;
 }
+
+#shrunk-nav-root {
+  margin: 2rem 2rem 1rem 2rem;
+  align-self: flex-start;
+  display: none;
+  float: right;
+}
+
+.shrunk-link-background {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  background-color: #2b2b2b;
+}
+
+@media only screen and (max-width: 768px) {
+
+  #nav-root {
+    display: none;
+  }
+
+  #shrunk-nav-root {
+    display: flex;
+    align-self: center;
+    justify-content: center;
+    flex-direction: row;
+    
+    min-height: 2.6rem;
+    align-items: center;
+    gap: 2rem;
+    border-radius: 8px;
+    padding: 2rem 2rem 0rem 2rem;
+  }
+
+  .content {
+    width: 100%;
+    margin: 0px 0px 0px 0px;
+  }
+
+  .anticon-mail svg, .anticon-user svg, .anticon-sliders svg {
+    font-size: 1.2rem;
+  }
+
+} 
 
 
 

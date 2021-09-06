@@ -1,12 +1,13 @@
+.anticon-close svg, .anticon-check svg {
+    font-size: 12px;
+}
+
 #recs-refresh-button {
     background-color: #77BD75;
     color: whitesmoke;
     border: none;
     width: 120px;
     align-self: flex-end;
-    margin-right: 2rem;
-    margin-top: 3rem;
-    margin-bottom: 3rem;
 }
 
 #recs-item-container {
@@ -20,6 +21,25 @@
     align-items:flex-start;
 }
 
+.recs-refresh {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+    margin-right: 2rem;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+    margin-left: 2rem;
+}
+
+.recs-feature {
+    display: flex;
+    flex-direction: row;
+    text-align: left;
+    align-items: center;
+    margin-top: 2rem;
+}
+
 .queue-button {
     height: 12rem;
     width: 12rem;
@@ -27,6 +47,7 @@
     border-radius: 5%;
     margin-bottom: 0.5rem;
     cursor:pointer;
+    background-size: 12rem !important;
 }
 
 .queue-indicator {
@@ -75,3 +96,36 @@
     background-color: #768761;
     border: none;
 }
+
+@media only screen and (max-width: 768px) {
+    
+    .recs-feature-label {
+        flex-grow: 1;
+        font-weight: 800;
+        font-size: 1rem;
+        color: #77BD75;
+    }
+
+    .recs-feature {
+        flex-direction: column;
+        
+    }
+
+    .recs-refresh {
+        flex-direction: column;
+        align-items: center;
+        margin-left: 0.2rem;
+        margin-right: 0.2rem;
+        justify-content: center;
+        text-align: center;
+    }
+
+    #recs-refresh-button {
+        background-color: #77BD75;
+        color: whitesmoke;
+        border: none;
+        width: 120px;
+        align-self: center;
+    }
+
+} 

@@ -4,7 +4,7 @@ import 'antd/dist/antd.css'
 import { Layout, Menu } from 'antd'
 import './App.css';
 import Main from './Main'
-import { BarChartOutlined, SlidersOutlined, MailOutlined, UserOutlined } from '@ant-design/icons'
+import { SlidersOutlined, MailOutlined, UserOutlined } from '@ant-design/icons'
 
 const { Sider, Footer, Content } = Layout;
 
@@ -14,6 +14,33 @@ const App = () => {
 
     const onCollapse = () => {
         setCollapsed(!collapsed)
+    }
+
+    const ShrunkNav = (props) => {
+
+        return (
+            <span id='shrunk-nav-root' >
+
+                <span className='shrunk-link-background'>
+                    <NavLink to='/'>
+                        <SlidersOutlined />
+                    </NavLink>
+                </span>
+
+                <span className='shrunk-link-background'>
+                    <NavLink to='/profile'>
+                        <UserOutlined />
+                    </NavLink>
+                </span>
+
+                <span className='shrunk-link-background'>
+                    <NavLink to='/contact'>
+                        <MailOutlined />
+                    </NavLink>
+                </span>
+                
+            </span>
+        )
     }
 
     return (
@@ -48,6 +75,7 @@ const App = () => {
 
             <Layout> 
                 <Content className='content'>
+                    <ShrunkNav />
                     <Main />
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>

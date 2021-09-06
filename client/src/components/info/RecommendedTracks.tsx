@@ -15,7 +15,7 @@ const RecommendedTracks: React.FC<Props> = (props) => {
     let playlist_items = props.playlist_items
     var avg_popularity = 0
 
-    playlist_items.forEach((item) => {
+    props.playlist_items.forEach((item) => {
         avg_popularity += item.track.popularity
     })
 
@@ -164,43 +164,43 @@ const RecommendedTracks: React.FC<Props> = (props) => {
 
             { og_danceability && <span style={{textAlign: 'right'}}>
                 
-                <span style={{display: 'flex', flexDirection: 'row', textAlign: 'left', alignItems: 'center'}}>
+                <span className='recs-feature' style={{marginTop: 0}}>
                     <span className='recs-feature-label'>danceability</span>
                     <Slider trackStyle={{backgroundColor: '#A1B592'}} handleStyle={{border: 'none'}} className='recs-feature-slider' value={danceability} onChange={(value: number) => { set_danceability(value) }} step={0.1} max={1} marks={{[playlist_feature_data['danceability']]: `${playlist_feature_data['danceability']}`}}/>
                 </span>
 
-                <span style={{display: 'flex', flexDirection: 'row', textAlign: 'left', alignItems: 'center', marginTop: '2rem'}}>
+                <span className='recs-feature'>
                     <span className='recs-feature-label'>energy</span>
                     <Slider trackStyle={{backgroundColor: '#A1B592'}} handleStyle={{border: 'none'}} className='recs-feature-slider' value={energy} onChange={(value: number) => { set_energy(value) }} step={0.1} max={1} marks={{[playlist_feature_data['energy']]: `${playlist_feature_data['energy']}`}}/>
                 </span>
 
-                <span style={{display: 'flex', flexDirection: 'row', textAlign: 'left', alignItems: 'center', marginTop: '2rem'}}>
+                <span className='recs-feature'>
                     <span className='recs-feature-label'>valence</span>
                     <Slider trackStyle={{backgroundColor: '#A1B592'}} handleStyle={{border: 'none'}} className='recs-feature-slider' value={valence} onChange={(value: number) => { set_valence(value) }} step={0.1} max={1} marks={{[playlist_feature_data['valence']]: `${playlist_feature_data['valence']}`}}/>
                 </span>
 
-                <span style={{display: 'flex', flexDirection: 'row', textAlign: 'left', alignItems: 'center', marginTop: '2rem'}}>
+                <span className='recs-feature'>
                     <span className='recs-feature-label'>liveness</span>
                     <Slider trackStyle={{backgroundColor: '#A1B592'}} handleStyle={{border: 'none'}} className='recs-feature-slider' value={liveness} onChange={(value: number) => { set_liveness(value) }} step={0.1} max={1} marks={{[playlist_feature_data['liveness']]: `${playlist_feature_data['liveness']}`}}/>
                 </span>
 
-                <span style={{display: 'flex', flexDirection: 'row', textAlign: 'left', alignItems: 'center', marginTop: '2rem'}}>
+                <span className='recs-feature'>
                     <span className='recs-feature-label'>instrumentalness</span>
                     <Slider trackStyle={{backgroundColor: '#A1B592'}} handleStyle={{border: 'none'}} className='recs-feature-slider' value={instrumentalness} onChange={(value: number) => { set_instrumentalness(value) }} step={0.1} max={1} marks={{[playlist_feature_data['instrumentalness']]: `${playlist_feature_data['instrumentalness']}`}}/>
                 </span>
 
-                <span style={{display: 'flex', flexDirection: 'row', textAlign: 'left', alignItems: 'center', marginTop: '2rem'}}>
+                <span className='recs-feature'>
                     <span className='recs-feature-label'>acousticness</span>
                     <Slider trackStyle={{backgroundColor: '#A1B592'}} handleStyle={{border: 'none'}} className='recs-feature-slider' value={acousticness} onChange={(value: number) => { set_acousticness(value) }} step={0.1} max={1} marks={{[playlist_feature_data['acousticness']]: `${playlist_feature_data['acousticness']}`}}/>
                 </span>
 
-                <span style={{display: 'flex', flexDirection: 'row', textAlign: 'left', alignItems: 'center', marginTop: '2rem'}}>
+                <span className='recs-feature'>
                     <span className='recs-feature-label'>speechiness</span>
                     <Slider trackStyle={{backgroundColor: '#A1B592'}} handleStyle={{border: 'none'}} className='recs-feature-slider' value={speechiness} onChange={(value: number) => { set_speechiness(value) }} step={0.1} max={1} marks={{[playlist_feature_data['speechiness']]: `${playlist_feature_data['speechiness']}`}}/>
                 </span> 
 
                 { use_popularity &&
-                    <span style={{display: 'flex', flexDirection: 'row', textAlign: 'left', alignItems: 'center', marginTop: '2rem'}}>
+                    <span className='recs-feature'>
                         <span className='recs-feature-label' style={{ color: '#A6AF96', flexGrow: 0 }}>popularity</span>
                         <span style={{flexGrow: 1}}>
                             <Switch style={{marginLeft: '0.7rem'}} checkedChildren={<CheckOutlined />} unCheckedChildren={<CloseOutlined />} defaultChecked onChange={() => { set_use_popularity(!use_popularity) }} />
@@ -210,7 +210,7 @@ const RecommendedTracks: React.FC<Props> = (props) => {
                 }
 
                 { !use_popularity &&
-                    <span style={{ display: 'flex', flexDirection: 'row', textAlign: 'left', alignItems: 'center', marginTop: '2rem'}}>
+                    <span className='recs-feature'>
                         <span className='recs-feature-label' style={{ color: '#A6AF96', opacity: '50%', flexGrow: 0 }}>popularity</span>
                         <span style={{flexGrow: 1}}>
                             <Switch style={{marginLeft: '0.7rem'}} checkedChildren={<CheckOutlined />} unCheckedChildren={<CloseOutlined />} defaultChecked={false} onChange={() => { set_use_popularity(!use_popularity) }} />
@@ -219,7 +219,7 @@ const RecommendedTracks: React.FC<Props> = (props) => {
                     </span> 
                 }
                 
-                <span style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '1rem'}}>
+                <span className='recs-refresh'>
                     <span style={{ fontWeight: 800, color: '#A1B592', flexGrow: 1}}> discover songs based on this playlist </span>
                     <Button onClick={recommend_songs} id='recs-refresh-button'> refresh </Button>
                 </span>
@@ -238,7 +238,7 @@ const RecommendedTracks: React.FC<Props> = (props) => {
                         { recommended_songs.map( (song: any, i: number) => {
                             return (
                                 <span key={i} style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center'}} >
-                                    <button className='queue-button' onClick={(e) => { queue_song(song.uri, e) }} style={{ backgroundSize: '12rem 12rem', background: `url(${song.album.images ? song.album.images[0].url : ''}) no-repeat center`}} >
+                                    <button className='queue-button' onClick={(e) => { queue_song(song.uri, e) }} style={{ background: `url(${song.album.images ? song.album.images[0].url : ''}) no-repeat center`}} >
                                         <span className='queue-indicator'> + </span>
                                     </button>
                                     <span style={{width: '12rem'}} >

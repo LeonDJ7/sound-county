@@ -10,9 +10,10 @@
 #top-songs-lists {
     display: flex;
     flex-direction: row;
-    gap: 4rem;
-    height: 50vh;
+    height: 26rem;
     width: 100%;
+    gap: 4rem;
+    justify-content: center;
 }
 
 #playlists-box {
@@ -24,9 +25,45 @@
 }
 
 .playlist-img {
+    background-size: 15rem !important;
     width: 15rem;
     height: 15rem;
-    background-size: 15rem 15rem !important;
     border: 0.1rem solid white;
     cursor: pointer;
+    overflow: auto;
 }
+
+@media only screen and (max-width: 768px) {
+
+    #top-songs-lists {
+        flex-direction: column;
+        justify-content: center;
+        width: 100%;
+        gap: 2rem;
+        height: 54rem
+    }
+
+}
+
+@media only screen and (max-width: 400px) {
+
+    .playlist-img {
+        width: 10rem;
+        height: 10rem;
+        background-size: 10rem !important;
+    }
+
+    #playlists-box {
+        gap: 1rem;
+    }
+
+}
+
+@media only screen and (max-width: 610px) {
+
+    .playlist-img {
+        width: 7rem;
+        height: 7rem;
+        background-size: 7rem 7rem !important;
+    }
+} 
