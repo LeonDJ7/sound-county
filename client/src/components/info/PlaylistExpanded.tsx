@@ -6,6 +6,7 @@ import { Skeleton } from 'antd'
 import { get_feature_data, refresh_access_token } from '../../tools'
 import FeatureChart from './FeatureChart'
 import RecommendedTracks from './RecommendedTracks'
+import config from '../../config'
 
 interface Props {
 }
@@ -28,7 +29,7 @@ const PlaylistExpanded: React.FC<Props> = (props) => {
         let access_token = window.localStorage.getItem('access_token')
         set_loading(true)
 
-        fetch(`http://localhost:4000/api/playlist_items?access_token=${access_token}&playlist_id=${playlist_info.id}`)
+        fetch(`/api/playlist_items?access_token=${access_token}&playlist_id=${playlist_info.id}`)
         .then((res: any) => res.json()) 
         .then((data: any[]) => {
             set_playlist_items(data)
@@ -55,7 +56,7 @@ const PlaylistExpanded: React.FC<Props> = (props) => {
         .catch( async (err: Error) => {
             await refresh_access_token()
             access_token = window.localStorage.getItem('access_token')
-            fetch(`http://localhost:4000/api/playlist_items?access_token=${access_token}&playlist_id=${playlist_info.id}`)
+            fetch(`/api/playlist_items?access_token=${access_token}&playlist_id=${playlist_info.id}`)
             .then((res: any) => res.json()) 
             .then((data: any[]) => {
                 set_playlist_items(data)

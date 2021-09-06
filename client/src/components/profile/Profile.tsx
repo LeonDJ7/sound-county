@@ -4,6 +4,7 @@ import { Button, Skeleton, Typography } from 'antd'
 import default_user_image from '../../assets/profile-white.png'
 import './Profile.css'
 import { login_url } from '../../spotify'
+import config from '../../config'
 
 
 interface Props {
@@ -26,7 +27,7 @@ const Profile: React.FC<Props> = (props) => {
             console.log('test')
             set_loading(true)
 
-            fetch(`http://localhost:4000/auth/login?code=${code}`)
+            fetch(`/auth/login?code=${code}`)
             .then((res: any) => res.json())
             .then((data: any) => {
 
@@ -43,7 +44,7 @@ const Profile: React.FC<Props> = (props) => {
                 window.localStorage.setItem('access_token', access_token)
                 window.localStorage.setItem('refresh_token', refresh_token)
 
-                fetch(`http://localhost:4000/auth/get_me?access_token=${access_token}`)
+                fetch(`/auth/get_me?access_token=${access_token}`)
                 .then((res: any) => res.json())
                 .then((data: any) => {
                     set_id(data.me.id)

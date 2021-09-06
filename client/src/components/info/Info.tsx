@@ -6,6 +6,7 @@ import { get_feature_data, refresh_access_token } from '../../tools'
 import TrackList from './TrackList'
 import FeatureChart from './FeatureChart'
 import { Link } from 'react-router-dom'
+import config from '../../config'
 
 interface Props {
     
@@ -48,7 +49,7 @@ const Info: React.FC<Props> = (props) => {
 
         let access_token = window.localStorage.getItem('access_token')
 
-        fetch(`http://localhost:4000/api/top_artists?access_token=${access_token}&time_range=short_term`)
+        fetch(`/api/top_artists?access_token=${access_token}&time_range=short_term`)
         .then((res: any) => res.json())
         .then((data: any[]) => {
             set_top_artists(data)
@@ -57,7 +58,7 @@ const Info: React.FC<Props> = (props) => {
         .catch( async (err: any) => {
             await refresh_access_token()
             access_token = window.localStorage.getItem('access_token')
-            fetch(`http://localhost:4000/api/top_artists?access_token=${access_token}&time_range=short_term`)
+            fetch(`/api/top_artists?access_token=${access_token}&time_range=short_term`)
             .then((res: any) => res.json())
             .then((data: any[]) => {
                 set_top_artists(data)
@@ -76,7 +77,7 @@ const Info: React.FC<Props> = (props) => {
 
         let access_token = window.localStorage.getItem('access_token')
 
-        fetch(`http://localhost:4000/api/top_tracks?access_token=${access_token}&time_range=short_term`)
+        fetch(`/api/top_tracks?access_token=${access_token}&time_range=short_term`)
         .then((res: any) => res.json())
         .then((data: any[]) => {
             set_top_songs(data)
@@ -103,7 +104,7 @@ const Info: React.FC<Props> = (props) => {
         .catch( async (err: any) => {
             await refresh_access_token()
             access_token = window.localStorage.getItem('access_token')
-            fetch(`http://localhost:4000/api/top_tracks?access_token=${access_token}&time_range=short_term`)
+            fetch(`/api/top_tracks?access_token=${access_token}&time_range=short_term`)
             .then((res: any) => res.json())
             .then((data: any[]) => {
                 set_top_songs(data)
@@ -141,7 +142,7 @@ const Info: React.FC<Props> = (props) => {
         let id = window.localStorage.getItem('id')
         let access_token = window.localStorage.getItem('access_token')
 
-        fetch(`http://localhost:4000/api/user_playlists?access_token=${access_token}&id=${id}`)
+        fetch(`/api/user_playlists?access_token=${access_token}&id=${id}`)
         .then((res: any) => res.json())
         .then((data: any[]) => {
             set_user_playlists( data.map( (playlist: any) => {
@@ -156,7 +157,7 @@ const Info: React.FC<Props> = (props) => {
         .catch( async (err: any) => {
             await refresh_access_token()
             access_token = window.localStorage.getItem('access_token')
-            fetch(`http://localhost:4000/api/user_playlists?access_token=${access_token}&id=${id}`)
+            fetch(`/api/user_playlists?access_token=${access_token}&id=${id}`)
             .then((res: any) => res.json())
             .then((data: any[]) => {
                 set_user_playlists( data.map( (playlist: any) => {

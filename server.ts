@@ -4,6 +4,7 @@ const express = require('express')
 const cors = require('cors')
 const api = require('./api')
 const auth = require('./auth')
+const path = require('path')
 dotenv.config();
 
 const app = express()
@@ -21,9 +22,13 @@ app.use(bodyParser.json())
 app.use('/api', api)
 app.use('/auth', auth)
 
-app.get('/', function (req: any, res: any) {
-  console.log('hi')
-});
+// Serve static files from the React frontend app
+app.use(express.static(path.join(__dirname, 'client/build')))
+
+// Anything that doesn't match the above, send back index.html
+app.get('*', (req: any, res: any) => {
+  res.sendFile(path.join(__dirname + '/client/build/index.html'))
+})
 
 app.listen(port, () => {
   console.log(`Server listening on the port::${port}`)

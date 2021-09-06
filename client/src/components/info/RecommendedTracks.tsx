@@ -4,6 +4,7 @@ import { Switch, Slider, Button, Alert, Skeleton } from 'antd'
 import './RecommendedTracks.css'
 import { refresh_access_token } from '../../tools'
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
+import config from '../../config'
 
 interface Props {
     playlist_feature_data: any
@@ -65,7 +66,7 @@ const RecommendedTracks: React.FC<Props> = (props) => {
             feature_targets.popularity = popularity
         }
 
-        fetch(`http://localhost:4000/api/discover?access_token=${access_token}&seeds=${seeds}&feature_targets=${JSON.stringify(feature_targets)}`)
+        fetch(`/api/discover?access_token=${access_token}&seeds=${seeds}&feature_targets=${JSON.stringify(feature_targets)}`)
         .then((res: any) => res.json())
         .then((data: any[] | any) => {
             set_loading(false)
@@ -90,7 +91,7 @@ const RecommendedTracks: React.FC<Props> = (props) => {
         .catch( async (err: Error) => {
             await refresh_access_token()
             access_token = window.localStorage.getItem('access_token')
-            fetch(`http://localhost:4000/api/discover?access_token=${access_token}&seeds=${seeds}&feature_targets=${feature_targets}`)
+            fetch(`/api/discover?access_token=${access_token}&seeds=${seeds}&feature_targets=${feature_targets}`)
             .then((res: any) => res.json())
             .then((data: any[] | any) => {
                 set_loading(false)
@@ -139,7 +140,7 @@ const RecommendedTracks: React.FC<Props> = (props) => {
 
         evt.style.color = '#000000'
 
-        fetch(`http://localhost:4000/api/queue_song?access_token=${access_token}&uri=${uri}`)
+        fetch(`/api/queue_song?access_token=${access_token}&uri=${uri}`)
         .then((res: any) => res.json())
         .then((data: any) => {
 

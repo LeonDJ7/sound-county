@@ -135,7 +135,7 @@ api.get('/average_audio_features', async (req: any, res: any) => {
             let data = await spotifyApi.getAudioFeaturesForTracks(current_songs)
 
 
-            data.body.audio_features.forEach((item) => {
+            data.body.audio_features.forEach((item: any) => {
                 avg_features.danceability += item.danceability
                 avg_features.energy += item.energy
                 avg_features.valence += item.valence
