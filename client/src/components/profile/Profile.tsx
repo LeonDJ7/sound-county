@@ -3,7 +3,7 @@ import 'antd/dist/antd.css'
 import { Button, Skeleton, Typography } from 'antd'
 import default_user_image from '../../assets/profile-white.png'
 import './Profile.css'
-import config from '../../config'
+import config from '../../config.js'
 
 
 interface Props {
