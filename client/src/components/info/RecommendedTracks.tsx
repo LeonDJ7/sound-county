@@ -4,7 +4,6 @@ import { Switch, Slider, Button, Alert, Skeleton } from 'antd'
 import './RecommendedTracks.css'
 import { refresh_access_token } from '../../tools'
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
-import config from '../../config'
 
 interface Props {
     playlist_feature_data: any

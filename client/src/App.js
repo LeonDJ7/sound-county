@@ -5,10 +5,17 @@ import { Layout, Menu } from 'antd'
 import './App.css';
 import Main from './Main'
 import { SlidersOutlined, MailOutlined, UserOutlined } from '@ant-design/icons'
+import sound_county_logo from './assets/sound-county-logo.png'
 
 const { Sider, Footer, Content } = Layout;
 
 const App = () => {
+
+    let path = window.location.pathname
+    let nav_selection = ['1']
+
+    if (path === '/profile') { nav_selection = ['2'] }
+    if (path === '/contact') { nav_selection = ['3'] }
 
     const [collapsed, setCollapsed] = React.useState(true)
 
@@ -20,6 +27,8 @@ const App = () => {
 
         return (
             <span id='shrunk-nav-root' >
+
+                <img className='logo' src={sound_county_logo} alt=''></img>
 
                 <span className='shrunk-link-background'>
                     <NavLink to='/'>
@@ -46,8 +55,8 @@ const App = () => {
     return (
         <Layout className='App' style={{ minHeight: '100vh' }}>
             <Sider id='nav-root' collapsible collapsed={collapsed} onCollapse={onCollapse}>
-                <img className="logo" src='' alt='' />
-                <Menu id='nav-menu' theme='light' defaultSelectedKeys={['1']} mode="inline">
+                <img className="logo" src={sound_county_logo} alt='' />
+                <Menu id='nav-menu' theme='light' defaultSelectedKeys={nav_selection} mode="inline">
 
                     <Menu.Item key="1" >
                         <NavLink to='/'>

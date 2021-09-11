@@ -6,7 +6,6 @@ import { Skeleton } from 'antd'
 import { get_feature_data, refresh_access_token } from '../../tools'
 import FeatureChart from './FeatureChart'
 import RecommendedTracks from './RecommendedTracks'
-import config from '../../config'
 
 interface Props {
 }
