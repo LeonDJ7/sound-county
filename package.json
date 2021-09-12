@@ -6,6 +6,7 @@
     "node": "14.x",
     "npm": "6.x"
   },
+  "types": "types/*.d.ts",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
@@ -26,11 +27,8 @@
     "concurrently": "^6.2.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node server.ts",
-    "lint": "eslint .",
-    "heroku-prebuild": "npm install && cd client && npm install -f",
-    "heroku-postbuild": "cd client && npm run build"
+    "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "author": "",
   "license": "ISC"
