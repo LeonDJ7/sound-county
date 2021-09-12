@@ -26,7 +26,7 @@ app.use('/auth', auth)
 app.use(express.static(path.join(__dirname, 'client/build')))
 
 // Anything that doesn't match the above, send back index.html
-app.get('*', (req: any, res: any) => {
+app.get('/*', (req: any, res: any) => {
   res.sendFile(path.join(__dirname + '/client/build/index.html'))
 })
 
