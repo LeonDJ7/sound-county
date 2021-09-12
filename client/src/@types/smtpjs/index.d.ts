@@ -15,3 +15,5 @@ declare namespace Email {
     function send(email: EmailData): Promise<string>;
   
 }
+
+declare module 'spotify-web-api-node'
