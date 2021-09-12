@@ -29,7 +29,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node server.ts",
     "lint": "eslint .",
-    "heroku-prebuild": "cd client && npm install -f",
+    "heroku-prebuild": "npm install && cd client && npm install -f",
     "heroku-postbuild": "cd client && npm run build"
   },
   "author": "",
