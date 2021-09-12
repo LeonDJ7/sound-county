@@ -3,7 +3,6 @@ import 'antd/dist/antd.css'
 import { Button, Skeleton, Typography } from 'antd'
 import default_user_image from '../../assets/profile-white.png'
 import './Profile.css'
-import config from '../../config.js'
 
 
 interface Props {
@@ -95,7 +94,7 @@ const Profile: React.FC<Props> = (props) => {
                 <span id='profile-content-container'>
                     <img id='profile-img' src={default_user_image} alt={default_user_image}></img>
                     <Button className='default-button' style={{width: '120px'}}>
-                        <a href={config.SPOTIFY_LOGIN_URL}>log in</a>
+                        <a href={process.env.SPOTIFY_LOGIN_URL}>log in</a>
                     </Button>
                 </span>
             }

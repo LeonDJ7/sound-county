@@ -6,7 +6,6 @@ import { get_feature_data, refresh_access_token } from '../../tools'
 import TrackList from './TrackList'
 import FeatureChart from './FeatureChart'
 import { Link } from 'react-router-dom'
-import config from '../../config'
 
 interface Props {
     
