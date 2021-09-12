@@ -2,7 +2,7 @@ import React from 'react'
 import 'antd/dist/antd.css'
 import { Button, Input, Alert } from 'antd'
 import './Contact.css'
-import config from '../../config'
+import config from '../../config.js'
 
 const { TextArea } = Input;
 
