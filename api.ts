@@ -228,7 +228,7 @@ api.get('/top_tracks', (req: any, res: any) => {
         spotifyApi.setAccessToken(access_token)
 
         spotifyApi.getMyTopTracks({ time_range: time_range, limit: 50 })
-            .then((data) => {
+            .then((data: any) => {
 
                 let top_tracks = data.body.items
 
@@ -265,7 +265,7 @@ api.get('/top_artists', (req: any, res: any) => {
         spotifyApi.setAccessToken(access_token)
 
         spotifyApi.getMyTopArtists({ time_range: time_range, limit: 50 })
-            .then((data) => {
+            .then((data: any) => {
 
                 let top_artists = data.body.items
 
@@ -301,7 +301,7 @@ api.get('/top_genres', (req: any, res: any) => {
         spotifyApi.setAccessToken(access_token)
 
         spotifyApi.getMyTopArtists({ time_range: time_range, limit: 50 })
-            .then((data) => {
+            .then((data: any) => {
 
                 let top_artists = data.body.items
                 let genre_scores: { [key: string]: number; } = {}
