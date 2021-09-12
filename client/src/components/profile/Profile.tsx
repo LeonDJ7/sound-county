@@ -23,7 +23,6 @@ const Profile: React.FC<Props> = (props) => {
 
         if (code) {
 
-            console.log('test')
             set_loading(true)
 
             fetch(`/auth/login?code=${code}`)
@@ -55,11 +54,13 @@ const Profile: React.FC<Props> = (props) => {
                 })
                 .catch((err: Error) => {
                     console.log(err)
+                    set_loading(false)
                 })
 
             })
             .catch((err) => {
                 console.log(err)
+                set_loading(false)
             })
         }
         
@@ -93,7 +94,7 @@ const Profile: React.FC<Props> = (props) => {
             {   !logged_in && !loading &&
                 <span id='profile-content-container'>
                     <img id='profile-img' src={default_user_image} alt={default_user_image}></img>
-                    <Button className='default-button' style={{width: '120px'}} onClick={log_out}>
+                    <Button className='default-button' style={{width: '120px'}}>
                         <a href={config.SPOTIFY_LOGIN_URL}>log in</a>
                     </Button>
                 </span>

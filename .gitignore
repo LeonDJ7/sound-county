@@ -24,6 +24,5 @@ yarn-error.log*
 
 # other
 client/node_modules
-client/src/spotify.js
-client/src/config.ts
+client/src/config.js
 .env

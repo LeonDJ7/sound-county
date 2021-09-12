@@ -1,5 +1,3 @@
-import config from './config'
-
 export const refresh_access_token = async () => {
 
     let refresh_token = window.localStorage.getItem('refresh_token')

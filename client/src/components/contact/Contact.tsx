@@ -28,7 +28,6 @@ const Contact: React.FC<Props> = (props) => {
         })
             .then( (message: any) => {
                 set_show_success_alert(true)
-                console.log(message)
             }).catch( (err: Error) => {
                 set_show_error_alert(true)
                 console.log(err)

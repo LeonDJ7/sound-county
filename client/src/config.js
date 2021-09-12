@@ -1,5 +1,5 @@
 const auth_endpoint = 'https://accounts.spotify.com/authorize/'
-const redirect_uri = 'https://sound-county.herokuapp.com/profile/'
+const redirect_uri = 'https://sound-county.herokuapp.com/profile'
 const client_id = '8251b0380e524e5f85321c48eb19aa22'
 
 const scopes = [
