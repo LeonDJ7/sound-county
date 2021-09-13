@@ -107,7 +107,7 @@ const Profile: React.FC<Props> = (props) => {
             {   !logged_in && !loading &&
                 <span id='profile-content-container'>
                     <img id='profile-img' src={default_user_image} alt={default_user_image}></img>
-                    <Button className='default-button' style={{width: '120px'}}>
+                    <Button className='default-button' style={{width: '180px'}}>
                         <a href={login_url}>log in with spotify</a>
                     </Button>
                 </span>
