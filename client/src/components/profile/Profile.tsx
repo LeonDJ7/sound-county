@@ -4,8 +4,8 @@ import { Button, Skeleton, Typography } from 'antd'
 import default_user_image from '../../assets/profile-white.png'
 import './Profile.css'
 
-let client_id = process.env.SPOTIFY_CLIENT_ID
-let redirect_uri = process.env.SPOTIFY_REDIRECT_URI
+let client_id = process.env.REACT_APP_SPOTIFY_CLIENT_ID
+let redirect_uri = process.env.REACT_APP_SPOTIFY_REDIRECT_URI
 
 console.log(redirect_uri)
 
@@ -108,7 +108,7 @@ const Profile: React.FC<Props> = (props) => {
                 <span id='profile-content-container'>
                     <img id='profile-img' src={default_user_image} alt={default_user_image}></img>
                     <Button className='default-button' style={{width: '120px'}}>
-                        <a href={login_url}>log in</a>
+                        <a href={login_url}>log in with spotify</a>
                     </Button>
                 </span>
             }

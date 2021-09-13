@@ -19,7 +19,7 @@ const Contact: React.FC<Props> = (props) => {
         window.Email.send({
             Host : "smtp.gmail.com",
             Username : 'revsguy7@gmail.com',
-            Password: process.env.GMAIL_PASSWORD as string,
+            Password: process.env.REACT_APP_GMAIL_PASSWORD as string,
             To : 'leondjust7@gmail.com',
             From : 'leondjust7@gmail.com',
             Subject : 'new sound county message',
