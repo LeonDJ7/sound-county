@@ -17,7 +17,7 @@ const scopes = [
     "user-modify-playback-state",
 ]
   
-let login_url = `https://accounts.spotify.com/en/authorize/client_id=${client_id}&response_type=code&redirect_uri=${redirect_uri}&show_dialog=true&scope=${scopes.join("%20")}`
+let login_url = `https://accounts.spotify.com/en/authorize/?client_id=${client_id}&response_type=code&redirect_uri=${redirect_uri}&show_dialog=true&scope=${scopes.join("%20")}`
 
 interface Props {
     
