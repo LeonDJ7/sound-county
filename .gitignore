@@ -26,4 +26,4 @@ yarn-error.log*
 client/node_modules
 client/src/config.js
 .env
-client/.env
+client/.env.production

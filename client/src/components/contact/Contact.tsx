@@ -20,8 +20,8 @@ const Contact: React.FC<Props> = (props) => {
             Host : "smtp.gmail.com",
             Username : 'revsguy7@gmail.com',
             Password: process.env.REACT_APP_GMAIL_PASSWORD as string,
-            To : 'leondjust7@gmail.com',
-            From : 'leondjust7@gmail.com',
+            To : 'revsguy5@gmail.com',
+            From : 'revsguy5@gmail.com',
             Subject : 'new sound county message',
             Body : message,
         })
