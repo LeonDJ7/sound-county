@@ -4,6 +4,20 @@ import { Button, Skeleton, Typography } from 'antd'
 import default_user_image from '../../assets/profile-white.png'
 import './Profile.css'
 
+let client_id = process.env.SPOTIFY_CLIENT_ID
+let redirect_uri = process.env.SPOTIFY_REDIRECT_URI
+
+console.log(redirect_uri)
+
+const scopes = [
+    "user-read-email",
+    "user-read-private",
+    "user-top-read",
+    "playlist-read-private",
+    "user-modify-playback-state",
+]
+  
+let login_url = `https://accounts.spotify.com/authorize/client_id=${client_id}&response_type=code&redirect_uri=${redirect_uri}&show_dialog=true&scope=${scopes.join("%20")}`
 
 interface Props {
     
@@ -94,7 +108,7 @@ const Profile: React.FC<Props> = (props) => {
                 <span id='profile-content-container'>
                     <img id='profile-img' src={default_user_image} alt={default_user_image}></img>
                     <Button className='default-button' style={{width: '120px'}}>
-                        <a href={process.env.SPOTIFY_LOGIN_URL}>log in</a>
+                        <a href={login_url}>log in</a>
                     </Button>
                 </span>
             }
