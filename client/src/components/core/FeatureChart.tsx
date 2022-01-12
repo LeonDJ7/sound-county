@@ -1,11 +1,9 @@
 import React from 'react'
 import 'antd/dist/antd.css'
 import { Alert } from 'antd'
-import './FeatureChart.css'
+import '../../css/FeatureChart.css'
 import { Chart, ChartConfiguration, ChartData, registerables } from 'chart.js'
 Chart.register(...registerables);
-
-
 
 interface Props {
     feature_data: any

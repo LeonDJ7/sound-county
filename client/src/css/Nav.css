@@ -1,0 +1,28 @@
+#nav-root {
+    height: 100%;
+}
+
+#nav-items-container {
+    padding-top: 1rem;
+}
+
+#nav-options-container {
+    display: flex;
+}
+
+.space {
+    flex-grow: 1;
+}
+
+.nav-item-typography {
+    padding-top: 1rem;
+    padding-left: 1rem;
+}
+
+.nav-item-img {
+    padding-top: 1rem;
+    padding-left: 1rem;
+    height: 48px;
+    width: 48px;
+}
+

@@ -1,7 +1,7 @@
 import React from 'react'
 import 'antd/dist/antd.css'
 import { Button, Input, Alert } from 'antd'
-import './Contact.css'
+import '../css/Contact.css'
 
 const { TextArea } = Input;
 
@@ -18,7 +18,7 @@ const Contact: React.FC<Props> = (props) => {
         
         window.Email.send({
             Host : "smtp.gmail.com",
-            Username : 'revsguy7@gmail.com',
+            Username : 'revsguy5@gmail.com',
             Password: process.env.REACT_APP_GMAIL_PASSWORD as string,
             To : 'revsguy5@gmail.com',
             From : 'revsguy5@gmail.com',

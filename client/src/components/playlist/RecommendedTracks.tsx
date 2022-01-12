@@ -1,7 +1,7 @@
 import React, { SyntheticEvent } from 'react'
 import 'antd/dist/antd.css'
 import { Switch, Slider, Button, Alert, Skeleton } from 'antd'
-import './RecommendedTracks.css'
+import '../../css/RecommendedTracks.css'
 import { refresh_access_token } from '../../tools'
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
 

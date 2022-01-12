@@ -1,13 +1,11 @@
 import React from 'react'
 import 'antd/dist/antd.css'
 import { Button, Skeleton, Typography } from 'antd'
-import default_user_image from '../../assets/profile-white.png'
-import './Profile.css'
+import default_user_image from '../assets/profile-white.png'
+import '../css/Profile.css'
 
 let client_id = process.env.REACT_APP_SPOTIFY_CLIENT_ID
 let redirect_uri = process.env.REACT_APP_SPOTIFY_REDIRECT_URI
-
-console.log(redirect_uri)
 
 const scopes = [
     "user-read-email",

@@ -1,16 +1,16 @@
 import React from 'react'
-import './Info.css'
+import '../css/Home.css'
 import 'antd/dist/antd.css'
 import { Button, Alert, Skeleton } from 'antd'
-import { get_feature_data, refresh_access_token } from '../../tools'
-import TrackList from './TrackList'
-import FeatureChart from './FeatureChart'
+import { get_feature_data, refresh_access_token } from '../tools'
+import TrackList from '../components/home/TrackList'
+import FeatureChart from '../components/core/FeatureChart'
 import { Link } from 'react-router-dom'
 
 interface Props {
     
 }
-const Info: React.FC<Props> = (props) => {
+const Home: React.FC<Props> = (props) => {
 
     const [logged_in, set_logged_in] = React.useState<boolean>(false)
     const [user_playlists, set_user_playlists] = React.useState<any[]>([])
@@ -228,7 +228,7 @@ const Info: React.FC<Props> = (props) => {
                                             playlist_info: playlist,
                                         }
                                     }}>
-                                        <button className='playlist-img' style={{ background: `url(${playlist.image ? playlist.image.url : ''})`}}>
+                                        <button className='playlist-preview-img' style={{ background: `url(${playlist.image ? playlist.image.url : ''})`}}>
                                             <span style={{backgroundColor: 'white', color: 'dimgray', padding: '0 0.5rem 0 0.5rem'}}> {playlist.name} </span>
                                         </button>
                                     </Link>
@@ -253,4 +253,4 @@ const Info: React.FC<Props> = (props) => {
     )
 }
 
-export default Info
+export default Home

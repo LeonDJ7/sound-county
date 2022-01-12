@@ -1,7 +1,7 @@
 import React from 'react'
 import 'antd/dist/antd.css'
 import { Skeleton } from 'antd'
-import './TrackList.css'
+import '../../css/TrackList.css'
 import fake_list_icon from '../../assets/profile-white.png'
 
 interface Props {

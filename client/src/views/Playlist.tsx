@@ -1,15 +1,15 @@
 import React from 'react'
 import {useHistory, useLocation} from "react-router-dom"
-import './PlaylistExpanded.css'
+import '../css/Playlist.css'
 import 'antd/dist/antd.css'
 import { Skeleton } from 'antd'
-import { get_feature_data, refresh_access_token } from '../../tools'
-import FeatureChart from './FeatureChart'
-import RecommendedTracks from './RecommendedTracks'
+import { get_feature_data, refresh_access_token } from '../tools'
+import FeatureChart from '../components/core/FeatureChart'
+import RecommendedTracks from '../components/playlist/RecommendedTracks'
 
 interface Props {
 }
-const PlaylistExpanded: React.FC<Props> = (props) => {
+const Playlist: React.FC<Props> = (props) => {
 
     const history = useHistory<any>()
     const passed_data = useLocation<any>()
@@ -88,11 +88,11 @@ const PlaylistExpanded: React.FC<Props> = (props) => {
     }
 
     return (
-        <span id='playlist-expanded-root'>
-            <span id='playlist-expanded-info'> 
-                <span id='playlist-expanded-header'>
+        <span id='playlist-root'>
+            <span id='playlist-info'> 
+                <span id='playlist-header'>
                     <span id='playlist-title'> {playlist_info.name} </span>
-                    <button onClick={() => { history.goBack() }} className='playlist-expanded-img' style={{ background: `url(${playlist_info.image ? playlist_info.image.url : ''})`}} />
+                    <button onClick={() => { history.goBack() }} className='playlist-img' style={{ background: `url(${playlist_info.image ? playlist_info.image.url : ''})`}} />
                 </span>
 
                 { !loading && <FeatureChart feature_data={playlist_feature_data} type={2} /> }
@@ -105,4 +105,4 @@ const PlaylistExpanded: React.FC<Props> = (props) => {
     )
 }
 
-export default PlaylistExpanded
+export default Playlist
