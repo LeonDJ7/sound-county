@@ -29,6 +29,15 @@ const Profile: React.FC<Props> = (props) => {
 
     React.useEffect(() => {
 
+        let stored_id = window.localStorage.getItem('id')
+        let stored_image_url = window.localStorage.getItem('image_url')
+
+        if (stored_id) {
+            set_id(stored_id as string)
+            set_image_url(stored_image_url as string)
+            set_logged_in(true)
+        }
+
         // 'URLSearchParams(window.location.search)' will get url string after the '?' & .get() will get the code value from the url
         const code = new URLSearchParams(window.location.search).get('code')
 
@@ -73,15 +82,6 @@ const Profile: React.FC<Props> = (props) => {
                 console.log(err)
                 set_loading(false)
             })
-        }
-        
-        let stored_id = window.localStorage.getItem('id')
-        let stored_image_url = window.localStorage.getItem('image_url')
-
-        if (stored_id) {
-            set_id(stored_id as string)
-            set_image_url(stored_image_url as string)
-            set_logged_in(true)
         }
 
     }, []);
