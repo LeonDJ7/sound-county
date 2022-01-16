@@ -1,5 +1,6 @@
-#info-root {
+#home-root {
     padding: 8% 8% 8% 8%;
+    min-height: 100%;
 }
 
 #top-songs-info-box {
@@ -24,7 +25,7 @@
     gap: 2rem;
 }
 
-.playlist-img {
+.playlist-preview-img {
     background-size: 15rem !important;
     width: 15rem;
     height: 15rem;

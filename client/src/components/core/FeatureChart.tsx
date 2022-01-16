@@ -12,10 +12,71 @@ interface Props {
 const FeatureChart: React.FC<Props> = (props) => {
 
     let type = props.type
-
     const [show_error_alert, set_show_error_alert] = React.useState<boolean>(false)
 
     React.useEffect(() => {
+
+        const set_up_chart = (feature_data: any) => {
+
+            Chart.defaults.color ='lightgray';
+            Chart.defaults.font.size = 12
+    
+            set_show_error_alert(false)
+    
+            const chart_data: ChartData = {
+                labels: [
+                    'danceability',
+                    'energy',
+                    'valence',
+                    'liveness',
+                    'instrumentalness',
+                    'acousticness',
+                    'speechiness',
+                ],
+                datasets: [{
+                    label: type === 1 ? 'top songs avg' : 'playlist avg',
+                    fill: true,
+                    data: [
+                        feature_data['danceability'],
+                        feature_data['energy'],
+                        feature_data['valence'],
+                        feature_data['liveness'],
+                        feature_data['instrumentalness'],
+                        feature_data['acousticness'],
+                        feature_data['speechiness']
+                    ],
+                    backgroundColor: '#A1B592',
+                    borderColor: 'white',
+                }]
+            }
+            
+            const config: ChartConfiguration = {
+                type: 'line',
+                data: chart_data,
+                options: {
+                    scales: {
+                        y: {
+                            max: 1,
+                            beginAtZero: true,
+                        }
+                    },
+                }
+            }
+    
+            let id = ''
+    
+            if (type === 1) {
+                id = 'top-chart'
+            } else {
+                id = 'playlist-chart'
+            }
+    
+            new Chart(
+                document.getElementById(id) as HTMLCanvasElement,
+                config
+            )
+    
+        }
 
         try {
             set_up_chart(props.feature_data)
@@ -24,69 +85,7 @@ const FeatureChart: React.FC<Props> = (props) => {
             set_show_error_alert(true)
         }
 
-    }, [])
-
-    const set_up_chart = (feature_data: any) => {
-
-        Chart.defaults.color ='lightgray';
-        Chart.defaults.font.size = 12
-
-        set_show_error_alert(false)
-
-        const chart_data: ChartData = {
-            labels: [
-                'danceability',
-                'energy',
-                'valence',
-                'liveness',
-                'instrumentalness',
-                'acousticness',
-                'speechiness',
-            ],
-            datasets: [{
-                label: type === 1 ? 'top songs avg' : 'playlist avg',
-                fill: true,
-                data: [
-                    feature_data['danceability'],
-                    feature_data['energy'],
-                    feature_data['valence'],
-                    feature_data['liveness'],
-                    feature_data['instrumentalness'],
-                    feature_data['acousticness'],
-                    feature_data['speechiness']
-                ],
-                backgroundColor: '#A1B592',
-                borderColor: 'white',
-            }]
-        }
-        
-        const config: ChartConfiguration = {
-            type: 'line',
-            data: chart_data,
-            options: {
-                scales: {
-                    y: {
-                        max: 1,
-                        beginAtZero: true,
-                    }
-                },
-            }
-        }
-
-        let id = ''
-
-        if (type === 1) {
-            id = 'top-chart'
-        } else {
-            id = 'playlist-chart'
-        }
-
-        var chart = new Chart(
-            document.getElementById(id) as HTMLCanvasElement,
-            config
-        )
-
-    }
+    }, [props.feature_data, type])
 
     return (
         <div id='feature-chart-root'>

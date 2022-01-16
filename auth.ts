@@ -59,7 +59,7 @@ auth.get('/refresh_access_token', async (req: any, res: any) => {
 auth.get('/get_me', async (req: any, res: any) => {
     try {
         let access_token = req.query.access_token
-        var spotifyApi = new spotifyWebApi(credentials)
+        let spotifyApi = new spotifyWebApi(credentials)
         spotifyApi.setAccessToken(access_token)
 
         let data = await spotifyApi.getMe()

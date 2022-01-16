@@ -113,7 +113,7 @@ const Profile: React.FC<Props> = (props) => {
 
             { loading && 
                 <span style={{ display: 'flex', width: '100%', height: '100%', padding: '4rem 4rem 4rem 4rem'}}>
-                    <Skeleton /> 
+                    <Skeleton active loading/> 
                 </span>
             }
 

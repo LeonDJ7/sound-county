@@ -69,7 +69,7 @@ const TrackList: React.FC<Props> = (props) => {
 
                 { loading && 
                     <span style={{ display: 'flex', height: '80%', alignItems: 'center' }}>
-                        <Skeleton loading /> 
+                        <Skeleton active loading /> 
                     </span>
                 }
 

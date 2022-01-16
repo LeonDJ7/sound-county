@@ -205,6 +205,7 @@ api.get('/queue_song', (req: any, res: any) => {
         spotifyApi.addToQueue(uri)
         .then((data: any) => {
             console.log('success: song added to queue')
+            res.json({ success: true })
         })
         .catch((err: any) => {
             console.log(err)

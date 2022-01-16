@@ -64,7 +64,6 @@ const Home: React.FC<Props> = (props) => {
                 set_top_artists_loading(false)
             })
             .catch((err: any) => {
-                console.log(err)
                 set_top_songs_error(true)
                 set_top_artists_loading(false)
             })
@@ -178,7 +177,7 @@ const Home: React.FC<Props> = (props) => {
     }
 
     return (
-        <span id='info-root'>
+        <span id='home-root'>
 
             {   logged_in && 
 
@@ -198,7 +197,7 @@ const Home: React.FC<Props> = (props) => {
                             </span>
                             { top_songs_feature_data_loading && 
                                 <span style={{margin: '2rem 0 2rem 0'}}>
-                                    <Skeleton loading/> 
+                                    <Skeleton active loading/> 
                                 </span>
                             }
                             { !top_songs_feature_data_loading && <FeatureChart feature_data={top_songs_feature_data} type={1}/> }
@@ -244,8 +243,7 @@ const Home: React.FC<Props> = (props) => {
             }
 
             { !logged_in && 
-                <Button className='default-button' style={{margin: 'auto', width: '120px'}}> 
-                    
+                <Button className='default-button' style={{marginTop: '25%', width: '120px'}}> 
                     <a href='/profile' > log in </a>
                 </Button> }
 

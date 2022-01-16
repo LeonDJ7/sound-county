@@ -7,7 +7,7 @@
     color: whitesmoke;
     border: none;
     width: 120px;
-    align-self: flex-end;
+    align-self: center;
 }
 
 #recs-item-container {
@@ -27,7 +27,7 @@
     align-items: center;
     gap: 1rem;
     margin-right: 2rem;
-    margin-top: 3rem;
+    margin-top: 4rem;
     margin-bottom: 3rem;
     margin-left: 2rem;
 }
@@ -38,6 +38,11 @@
     text-align: left;
     align-items: center;
     margin-top: 2rem;
+}
+
+.queue-parent {
+    height: 12rem;
+    width: 12rem;
 }
 
 .queue-button {
@@ -51,15 +56,17 @@
 }
 
 .queue-indicator {
+    width: 100%;
+    height: 100%;
     font-weight: 500;
     font-size: 7rem;
     display: none;
     margin: auto;
-    color: dimgray;
+    color: white;
 }
 
 .queue-button:hover {
-    opacity: 50%;
+    opacity: 75%;
 }
 
 .queue-button:hover .queue-indicator, .queue-indicator:hover  {

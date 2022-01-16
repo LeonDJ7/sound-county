@@ -20,14 +20,11 @@ const RecommendedTracks: React.FC<Props> = (props) => {
     })
 
     avg_popularity = Math.round(avg_popularity / playlist_items.length)
-
     const [loading, set_loading] = React.useState<boolean>(false)
-    const [show_error_alert, set_show_error_alert] = React.useState<boolean>(false)
-    const [show_device_error, set_show_device_error] = React.useState<boolean>(false)
+    const [show_alert, set_show_alert] = React.useState<boolean>(false)
+    const [alert_type, set_alert_type] = React.useState<string>('error')
     const [use_popularity, set_use_popularity] = React.useState<boolean>(false)
-
     const [recommended_songs, set_recommended_songs] = React.useState<any[]>([])
-
     let og_danceability = playlist_feature_data.danceability
     const [danceability, set_danceability] = React.useState<number>(og_danceability)
     const [energy, set_energy] = React.useState<number>(playlist_feature_data.energy)
@@ -42,8 +39,7 @@ const RecommendedTracks: React.FC<Props> = (props) => {
 
         let access_token = window.localStorage.getItem('access_token')
         set_loading(true)
-        set_show_error_alert(false)
-        set_show_device_error(false)
+        set_show_alert(false)
 
         let seeds: string[] = []
 
@@ -69,7 +65,7 @@ const RecommendedTracks: React.FC<Props> = (props) => {
         .then((res: any) => res.json())
         .then((data: any[] | any) => {
             set_loading(false)
-            if (data.body) { set_show_error_alert(true); return }
+            if (data.body) { set_alert_type('error'); set_show_alert(true); return }
             let data_filtered = data.filter((rec: any) => {
                 return playlist_items.find(item => rec.id === item.track.id) === undefined
             })
@@ -94,7 +90,7 @@ const RecommendedTracks: React.FC<Props> = (props) => {
             .then((res: any) => res.json())
             .then((data: any[] | any) => {
                 set_loading(false)
-            if (data.body) { set_show_error_alert(true); return }
+            if (data.body) { set_alert_type('error'); set_show_alert(true); return }
             let data_filtered = data.filter((rec: any) => {
                 return playlist_items.find(item => rec.id === item.track.id) === undefined
             })
@@ -115,7 +111,8 @@ const RecommendedTracks: React.FC<Props> = (props) => {
             .catch( (err: any) => {
                 // now give up
                 set_loading(false)
-                set_show_error_alert(true)
+                set_alert_type('error')
+                set_show_alert(true)
             })
         })
 
@@ -131,8 +128,7 @@ const RecommendedTracks: React.FC<Props> = (props) => {
 
     const queue_song = (uri: string, e: SyntheticEvent) => {
 
-        set_show_device_error(false)
-        set_show_error_alert(false)
+        set_show_alert(false)
 
         let access_token = window.localStorage.getItem('access_token')
         let evt = e.target as HTMLElement
@@ -143,17 +139,21 @@ const RecommendedTracks: React.FC<Props> = (props) => {
         .then((res: any) => res.json())
         .then((data: any) => {
 
-            if (data.body.error && data.body.error.reason === 'NO_ACTIVE_DEVICE') {
-                set_show_device_error(true)
+            if (data.body && data.body.error && data.body.error.reason === 'NO_ACTIVE_DEVICE') {
+                set_alert_type('device_error');
+            } else if (data.body && data.body.error) {
+                set_alert_type('error');
+            } else {
+                set_alert_type('success');
             }
 
-            setTimeout(() => {
-                evt.style.color = 'dimgrey'
-            }, 500);
+            set_show_alert(true)
 
         })
         .catch( (err: any) => {
-            set_show_error_alert(true)
+            set_alert_type('error')
+            set_loading(false)
+            set_show_alert(true)
             console.log(err)
         })
         
@@ -220,20 +220,26 @@ const RecommendedTracks: React.FC<Props> = (props) => {
                 }
                 
                 <span className='recs-refresh'>
-                    <span style={{ fontWeight: 800, color: '#A1B592', flexGrow: 1}}> discover songs based on this playlist </span>
+                    <span style={{ display: 'flex', flexDirection: 'column', flexGrow: 1}}>
+                        <span style={{ fontWeight: 800, color: '#A1B592'}}> discover songs based on this playlist </span>
+                        <span style={{ fontWeight: 800, color: 'whitesmoke'}}> click a song to add it to your queue </span>
+                    </span>
                     <Button onClick={recommend_songs} id='recs-refresh-button'> refresh </Button>
                 </span>
-                
 
-                { show_error_alert && <div style={{ textAlign: 'center', marginTop: '2rem'}}>
+                { (show_alert && alert_type === 'error') && <div style={{ textAlign: 'center', marginTop: '2rem'}}>
                     <Alert showIcon message={'oops... something went wrong'} type='error' />
                 </div> }
 
-                { show_device_error && <div style={{ textAlign: 'center', marginTop: '2rem'}}>
+                { (show_alert && alert_type === 'device_error') && <div style={{ textAlign: 'center', marginTop: '2rem'}}>
                     <Alert showIcon message={'open up spotify on your device to queue a song'} type='error' />
                 </div> }
 
-                { !loading && !show_error_alert && recommended_songs.length > 0 && recommended_songs && 
+                { (show_alert && alert_type === 'success') && <div style={{ textAlign: 'center', marginTop: '2rem'}}>
+                    <Alert showIcon message={'song queued!'} type='success' />
+                </div> }
+
+                { !loading && recommended_songs.length > 0 && recommended_songs && 
                     <span id='recs-item-container'>
                         { recommended_songs.map( (song: any, i: number) => {
                             return (
@@ -266,7 +272,7 @@ const RecommendedTracks: React.FC<Props> = (props) => {
 
                 { loading && 
                     <span style={{ display: 'flex', alignItems: 'center' }}>
-                        <Skeleton loading/>
+                        <Skeleton active loading/>
                     </span>
                 }
 
