@@ -2,10 +2,6 @@
   "name": "sound-county-api",
   "version": "1.0.0",
   "description": "",
-  "engines": {
-    "node": "14.x",
-    "npm": "6.x"
-  },
   "types": "types/*.d.ts",
   "dependencies": {
     "cors": "^2.8.5",
