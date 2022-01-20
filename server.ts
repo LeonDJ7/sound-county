@@ -1,15 +1,14 @@
-import * as dotenv from "dotenv";
-var bodyParser = require('body-parser')
-const express = require('express')
-const cors = require('cors')
-const api = require('./api')
-const auth = require('./auth')
-const path = require('path')
-dotenv.config();
+import * as dotenv from 'dotenv'
+import bodyParser from 'body-parser'
+import express from 'express'
+import cors from 'cors'
+import api from './api'
+import auth from './auth'
+import path from 'path'
 
+dotenv.config();
 const app = express()
 const port = process.env.PORT || 4000
-
 app.use(cors())
 app.use(express.json())
 

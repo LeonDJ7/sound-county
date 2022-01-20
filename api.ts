@@ -338,4 +338,4 @@ api.get('/top_genres', (req: any, res: any) => {
     }
 })
 
-module.exports = api
+export default api

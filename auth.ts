@@ -72,4 +72,4 @@ auth.get('/get_me', async (req: any, res: any) => {
     }
 })
 
-module.exports = auth
+export default auth
