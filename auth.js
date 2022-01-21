@@ -1,8 +1,7 @@
+require('dotenv').config()
 const express = require('express')
-import * as dotenv from "dotenv";
-import spotifyWebApi from "spotify-web-api-node";
+const spotifyWebApi = require('spotify-web-api-node')
 const auth = express.Router()
-dotenv.config();
 
 const credentials = {
     clientId: process.env.SPOTIFY_CLIENT_ID,
@@ -10,7 +9,7 @@ const credentials = {
     redirectUri: process.env.SPOTIFY_REDIRECT_URI,
 }
 
-auth.get('/login', (req: any, res: any) => {
+auth.get('/login', (req, res) => {
     try {
 
         //  Get the "code" value posted from the client-side and get the user's accessToken from the spotify api     
@@ -20,7 +19,7 @@ auth.get('/login', (req: any, res: any) => {
 
         // Retrieve an access token
         spotifyApi.authorizationCodeGrant(code)
-            .then((data: any) => {
+            .then((data) => {
 
                 // Returning the User's AccessToken in the json formate  
                 res.json({
@@ -28,7 +27,7 @@ auth.get('/login', (req: any, res: any) => {
                     refresh_token: data.body.refresh_token,
                 }) 
             })
-            .catch((err: any) => {
+            .catch((err) => {
                 res.status(400).send(err)
             })
         
@@ -38,7 +37,7 @@ auth.get('/login', (req: any, res: any) => {
     }
 })
 
-auth.get('/refresh_access_token', async (req: any, res: any) => {
+auth.get('/refresh_access_token', async (req, res) => {
     try {
         let refresh_token = req.query.refresh_token
 
@@ -56,7 +55,7 @@ auth.get('/refresh_access_token', async (req: any, res: any) => {
     }
 })
 
-auth.get('/get_me', async (req: any, res: any) => {
+auth.get('/get_me', async (req, res) => {
     try {
         let access_token = req.query.access_token
         let spotifyApi = new spotifyWebApi(credentials)
@@ -72,4 +71,4 @@ auth.get('/get_me', async (req: any, res: any) => {
     }
 })
 
-export default auth
+module.exports = auth

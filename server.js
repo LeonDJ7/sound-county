@@ -1,12 +1,11 @@
-import * as dotenv from 'dotenv'
-import bodyParser from 'body-parser'
-import express from 'express'
-import cors from 'cors'
-import api from './api'
-import auth from './auth'
-import path from 'path'
+require('dotenv').config()
+const bodyParser = require('body-parser')
+const express = require('express')
+const cors = require('cors')
+const path = require('path')
+const api = require('./api')
+const auth = require('./auth')
 
-dotenv.config();
 const app = express()
 const port = process.env.PORT || 4000
 app.use(cors())
@@ -25,7 +24,7 @@ app.use('/auth', auth)
 app.use(express.static(path.join(__dirname, 'client/build')))
 
 // Anything that doesn't match the above, send back index.html
-app.get('/*', (req: any, res: any) => {
+app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname + '/client/build/index.html'))
 })
 

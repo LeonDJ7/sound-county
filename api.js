@@ -1,9 +1,8 @@
-import spotifyWebApi from 'spotify-web-api-node'
-import * as dotenv from 'dotenv'
-const fetch = require('node-fetch')
+require('dotenv').config()
+const spotifyWebApi = require('spotify-web-api-node')
 const express = require('express')
+
 const api = express.Router()
-dotenv.config();
 
 const credentials = {
     clientId: process.env.SPOTIFY_CLIENT_SECRET,
@@ -11,7 +10,7 @@ const credentials = {
     redirectUri: process.env.SPOTIFY_REDIRECT_URI,
 }
 
-api.get('/playlist_items', async (req: any, res: any) => {
+api.get('/playlist_items', async (req, res) => {
     try {
 
         let access_token = req.query.access_token
@@ -23,7 +22,7 @@ api.get('/playlist_items', async (req: any, res: any) => {
         // get items in playlist and assign points for each genre 
 
         let more_items = true
-        let playlist_items: any[] = []
+        let playlist_items = []
         let offset = 0
 
         while (more_items === true) {
@@ -34,7 +33,7 @@ api.get('/playlist_items', async (req: any, res: any) => {
             })
 
             offset += data.body.items.length
-            data.body.items.forEach((item: any) => {
+            data.body.items.forEach((item) => {
                 playlist_items.push(item)
             })
             if (data.body.next === null) { more_items = false }
@@ -49,7 +48,7 @@ api.get('/playlist_items', async (req: any, res: any) => {
     }
 })
 
-api.get('/discover', async (req: any, res: any) => {
+api.get('/discover', async (req, res) => {
     try {
 
         let access_token = req.query.access_token
@@ -61,7 +60,7 @@ api.get('/discover', async (req: any, res: any) => {
         let spotifyApi = new spotifyWebApi(credentials)
         spotifyApi.setAccessToken(access_token)
 
-        let feature_data: any = {
+        let feature_data = {
             limit: 50,
             seed_tracks: seeds,
             target_danceability: feature_targets.danceability,
@@ -79,10 +78,10 @@ api.get('/discover', async (req: any, res: any) => {
 
         let data = await spotifyApi.getRecommendations(feature_data)
 
-        let recs: any = data.body.tracks.map((item: any) => {
+        let recs = data.body.tracks.map((item) => {
             return {
                 album: item.album,
-                artists: item.artists.map((artist: any) => artist.name),
+                artists: item.artists.map((artist) => artist.name),
                 id: item.id,
                 name: item.name,
                 uri: item.uri
@@ -103,7 +102,7 @@ api.get('/discover', async (req: any, res: any) => {
 
 })
 
-api.get('/average_audio_features', async (req: any, res: any) => {
+api.get('/average_audio_features', async (req, res) => {
     try {
 
         let access_token = req.query.access_token
@@ -114,7 +113,7 @@ api.get('/average_audio_features', async (req: any, res: any) => {
 
         songs = songs.split(',')
 
-        let avg_features: any = {
+        let avg_features = {
             danceability: 0,
             energy: 0,
             valence: 0,
@@ -135,7 +134,7 @@ api.get('/average_audio_features', async (req: any, res: any) => {
             let data = await spotifyApi.getAudioFeaturesForTracks(current_songs)
 
 
-            data.body.audio_features.forEach((item: any) => {
+            data.body.audio_features.forEach((item) => {
                 avg_features.danceability += item.danceability
                 avg_features.energy += item.energy
                 avg_features.valence += item.valence
@@ -165,7 +164,7 @@ api.get('/average_audio_features', async (req: any, res: any) => {
     }
 })
 
-api.get('/user_playlists', async (req: any, res: any) => {
+api.get('/user_playlists', async (req, res) => {
     try {
 
         let id = req.query.id
@@ -173,7 +172,7 @@ api.get('/user_playlists', async (req: any, res: any) => {
         let spotifyApi = new spotifyWebApi(credentials)
         spotifyApi.setAccessToken(access_token)
 
-        let playlist_data: any[] = []
+        let playlist_data = []
         let offset = 0
         let more_items = true
 
@@ -193,7 +192,7 @@ api.get('/user_playlists', async (req: any, res: any) => {
 })
 
 // simple spotify api call
-api.get('/queue_song', (req: any, res: any) => {
+api.get('/queue_song', (req, res) => {
     try {
 
         let access_token = req.query.access_token
@@ -203,11 +202,11 @@ api.get('/queue_song', (req: any, res: any) => {
         spotifyApi.setAccessToken(access_token)
 
         spotifyApi.addToQueue(uri)
-        .then((data: any) => {
+        .then((data) => {
             console.log('success: song added to queue')
             res.json({ success: true })
         })
-        .catch((err: any) => {
+        .catch((err) => {
             console.log(err)
             res.status(400).send(err)
         })
@@ -219,7 +218,7 @@ api.get('/queue_song', (req: any, res: any) => {
 })
 
 // gets 50 top songs for user, basic spotify api call
-api.get('/top_tracks', (req: any, res: any) => {
+api.get('/top_tracks', (req, res) => {
     try {
 
         let time_range = req.query.time_range
@@ -229,14 +228,14 @@ api.get('/top_tracks', (req: any, res: any) => {
         spotifyApi.setAccessToken(access_token)
 
         spotifyApi.getMyTopTracks({ time_range: time_range, limit: 50 })
-            .then((data: any) => {
+            .then((data) => {
 
                 let top_tracks = data.body.items
 
-                let filtered_top_tracks = top_tracks.map( (item: any) => {
+                let filtered_top_tracks = top_tracks.map( (item) => {
                     return {
                         name: item.name,
-                        artists: item.artists.map((artist: any) => artist.name),
+                        artists: item.artists.map((artist) => artist.name),
                         image_url: item.album.images ? item.album.images[0].url : '', // not sure if its guaranteed all tracks/artists have image
                         id: item.id
                     }
@@ -245,7 +244,7 @@ api.get('/top_tracks', (req: any, res: any) => {
                 res.json(filtered_top_tracks)
 
             })
-            .catch((err: any) => {
+            .catch((err) => {
                 res.status(400).send(err)
             })
 
@@ -256,7 +255,7 @@ api.get('/top_tracks', (req: any, res: any) => {
 })
 
 // gets 50 top artists for user, basic spotify api call
-api.get('/top_artists', (req: any, res: any) => {
+api.get('/top_artists', (req, res) => {
     try {
 
         let time_range = req.query.time_range
@@ -266,11 +265,11 @@ api.get('/top_artists', (req: any, res: any) => {
         spotifyApi.setAccessToken(access_token)
 
         spotifyApi.getMyTopArtists({ time_range: time_range, limit: 50 })
-            .then((data: any) => {
+            .then((data) => {
 
                 let top_artists = data.body.items
 
-                let filtered_top_artists = top_artists.map( (item: any) => {
+                let filtered_top_artists = top_artists.map( (item) => {
                     return {
                         name: item.name,
                         genres: item.genres,
@@ -281,7 +280,7 @@ api.get('/top_artists', (req: any, res: any) => {
                 res.json(filtered_top_artists)
 
             })
-            .catch((err: any) => {
+            .catch((err) => {
                 res.status(400).send(err)
             })
 
@@ -292,7 +291,7 @@ api.get('/top_artists', (req: any, res: any) => {
 })   
 
 // find top artists, extrapolate genre data from that
-api.get('/top_genres', (req: any, res: any) => {
+api.get('/top_genres', (req, res) => {
     try {
 
         let time_range = req.query.time_range
@@ -302,14 +301,14 @@ api.get('/top_genres', (req: any, res: any) => {
         spotifyApi.setAccessToken(access_token)
 
         spotifyApi.getMyTopArtists({ time_range: time_range, limit: 50 })
-            .then((data: any) => {
+            .then((data) => {
 
                 let top_artists = data.body.items
-                let genre_scores: { [key: string]: number; } = {}
+                let genre_scores = {}
 
-                top_artists.forEach((item: any, i: number) => {
+                top_artists.forEach((item, i) => {
                     
-                    item.genres.forEach((genre: string) => {
+                    item.genres.forEach((genre) => {
                         if (!genre_scores[genre]) genre_scores[genre] = 0
                         genre_scores[genre] += (50 - i)
                     })
@@ -328,7 +327,7 @@ api.get('/top_genres', (req: any, res: any) => {
                 res.json(genre_array)
 
             })
-            .catch((err: any) => {
+            .catch((err) => {
                 res.status(400).send(err)
             })
 
@@ -338,4 +337,4 @@ api.get('/top_genres', (req: any, res: any) => {
     }
 })
 
-export default api
+module.exports = api
