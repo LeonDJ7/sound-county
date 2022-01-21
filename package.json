@@ -2,6 +2,7 @@
   "name": "sound-county-api",
   "version": "1.0.0",
   "description": "",
+  "types": "@types/*.d.ts",
   "dependencies": {
     "body-parser": "^1.19.1",
     "cors": "^2.8.5",
