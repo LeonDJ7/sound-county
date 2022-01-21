@@ -189,8 +189,8 @@ const Home = (props) => {
                     {!top_songs_error && 
                         <span id='top-songs-info-box'> 
                             <span id='top-songs-lists'>
-                                <TrackList type='Top Songs' list_id={1} data={top_songs} loading={top_songs_loading}/>
-                                <TrackList type='Top Artists' list_id={2} data={top_artists} loading={top_artists_loading}/>
+                                <TrackList key={top_songs} type='Top Songs' list_id={1} data={top_songs} loading={top_songs_loading}/>
+                                <TrackList key={top_artists} type='Top Artists' list_id={2} data={top_artists} loading={top_artists_loading}/>
                             </span>
                             { top_songs_feature_data_loading && 
                                 <span style={{margin: '2rem 0 2rem 0'}}>

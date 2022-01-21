@@ -5,10 +5,7 @@ import Contact from './views/Contact'
 import Home from './views/Home';
 import Playlist from './views/Playlist';
 
-interface Props {
-    
-}
-const Main: React.FC<Props> = (props) => {
+const Main = (props) => {
 
     return (
         
