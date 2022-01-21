@@ -92,7 +92,7 @@ const FeatureChart: React.FC<Props> = (props) => {
 
             { show_error_alert && 
                 <div style={{marginBottom: '1rem'}}>
-                    
+                    <Alert showIcon message={'oops... something went wrong loading your graph'} type='error'></Alert>
                 </div> 
             }
 

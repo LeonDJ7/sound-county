@@ -69,7 +69,7 @@ const RecommendedTracks: React.FC<Props> = (props) => {
             let data_filtered = data.filter((rec: any) => {
                 return playlist_items.find(item => rec.id === item.track.id) === undefined
             })
-            let recs = []
+            let recs: any = []
 
             if (data_filtered.length > 10) {
                 for (let i = 0; i < 10; i++) {
@@ -94,7 +94,7 @@ const RecommendedTracks: React.FC<Props> = (props) => {
             let data_filtered = data.filter((rec: any) => {
                 return playlist_items.find(item => rec.id === item.track.id) === undefined
             })
-            let recs = []
+            let recs: any = []
 
             if (data_filtered.length > 10) {
                 for (let i = 0; i < 10; i++) {
