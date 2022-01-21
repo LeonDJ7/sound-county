@@ -17,15 +17,12 @@ const scopes = [
   
 let login_url = `https://accounts.spotify.com/en/authorize/?client_id=${client_id}&response_type=code&redirect_uri=${redirect_uri}&show_dialog=true&scope=${scopes.join("%20")}`
 
-interface Props {
-    
-}
-const Profile: React.FC<Props> = (props) => {
+const Profile = (props) => {
 
-    const [id, set_id] = React.useState<string>('')
-    const [image_url, set_image_url] = React.useState<string>('')
-    const [logged_in, set_logged_in] = React.useState<boolean>(false)
-    const [loading, set_loading] = React.useState<boolean>(false)
+    const [id, set_id] = React.useState('')
+    const [image_url, set_image_url] = React.useState('')
+    const [logged_in, set_logged_in] = React.useState(false)
+    const [loading, set_loading] = React.useState(false)
 
     React.useEffect(() => {
 
@@ -33,8 +30,8 @@ const Profile: React.FC<Props> = (props) => {
         let stored_image_url = window.localStorage.getItem('image_url')
 
         if (stored_id) {
-            set_id(stored_id as string)
-            set_image_url(stored_image_url as string)
+            set_id(stored_id)
+            set_image_url(stored_image_url)
             set_logged_in(true)
         }
 
@@ -46,8 +43,8 @@ const Profile: React.FC<Props> = (props) => {
             set_loading(true)
 
             fetch(`/auth/login?code=${code}`)
-            .then((res: any) => res.json())
-            .then((data: any) => {
+            .then((res) => res.json())
+            .then((data) => {
 
                 let access_token = data.access_token
                 let refresh_token = data.refresh_token
@@ -63,8 +60,8 @@ const Profile: React.FC<Props> = (props) => {
                 window.localStorage.setItem('refresh_token', refresh_token)
 
                 fetch(`/auth/get_me?access_token=${access_token}`)
-                .then((res: any) => res.json())
-                .then((data: any) => {
+                .then((res) => res.json())
+                .then((data) => {
                     set_id(data.me.id)
                     set_image_url(data.me.images ? data.me.images[0].url : '')
                     window.localStorage.setItem('id', data.me.id)
@@ -72,7 +69,7 @@ const Profile: React.FC<Props> = (props) => {
                     set_logged_in(true)
                     set_loading(false)
                 })
-                .catch((err: Error) => {
+                .catch((err) => {
                     console.log(err)
                     set_loading(false)
                 })

@@ -10,19 +10,19 @@ export const refresh_access_token = async () => {
         .then((data) => {
             window.localStorage.setItem('access_token', data.access_token)
         })
-        .catch((err: any) => {
+        .catch((err) => {
             console.log(err)
         })
 
     return
 }
 
-export const get_feature_data = async (songs: any[]) => {
+export const get_feature_data = async (songs) => {
 
     if (!songs) return
 
     let access_token = window.localStorage.getItem('access_token')
-    let res = await fetch(`/api/average_audio_features?access_token=${access_token}&songs=${songs[0].track ? songs.map((song: any) => song.track.id) : songs.map((song: any) => song.id)}`)
+    let res = await fetch(`/api/average_audio_features?access_token=${access_token}&songs=${songs[0].track ? songs.map((song) => song.track.id) : songs.map((song) => song.id)}`)
     let data = await res.json()
     return data
 

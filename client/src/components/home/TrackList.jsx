@@ -4,13 +4,7 @@ import { Skeleton } from 'antd'
 import '../../css/TrackList.css'
 import fake_list_icon from '../../assets/profile-white.png'
 
-interface Props {
-    type: string,
-    list_id: number,
-    data: any[]
-    loading: boolean
-}
-const TrackList: React.FC<Props> = (props) => {
+const TrackList = (props) => {
 
     let type = props.type
     let list_id = props.list_id
@@ -39,7 +33,7 @@ const TrackList: React.FC<Props> = (props) => {
                                 <span className='track-list-text'> {item.name} </span>
 
                                 <span style={{marginLeft: '0.2rem', display: 'flex', flexDirection: 'row'}}>
-                                    { (list_id === 1) && item.artists.map( (artist: string, i: number) => {
+                                    { (list_id === 1) && item.artists.map( (artist, i) => {
                                         return (
                                             <span key={i}>
                                                 <span className='track-list-subtext'> {'|'} </span>
@@ -50,7 +44,7 @@ const TrackList: React.FC<Props> = (props) => {
                                 </span>
 
                                 <span style={{marginLeft: '0.2rem', display: 'flex', flexDirection: 'row'}}>
-                                    { (list_id === 2) && item.genres.map( (genre: string, i: number) => {
+                                    { (list_id === 2) && item.genres.map( (genre, i) => {
                                         return (
                                             <span key={i}>
                                                 <span className='track-list-subtext' style={{color: 'white'}}> {'|'} </span>

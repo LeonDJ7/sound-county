@@ -7,17 +7,15 @@ import { get_feature_data, refresh_access_token } from '../tools'
 import FeatureChart from '../components/core/FeatureChart'
 import RecommendedTracks from '../components/playlist/RecommendedTracks'
 
-interface Props {
-}
-const Playlist: React.FC<Props> = (props) => {
+const Playlist = (props) => {
 
-    const history = useHistory<any>()
-    const passed_data = useLocation<any>()
+    const history = useHistory()
+    const passed_data = useLocation()
     let playlist_info = passed_data.state.playlist_info
     
-    const [loading, set_loading] = React.useState<boolean>(false)
-    const [playlist_items, set_playlist_items] = React.useState<any[]>([])
-    const [playlist_feature_data, set_playlist_feature_data] = React.useState<any>({})
+    const [loading, set_loading] = React.useState(false)
+    const [playlist_items, set_playlist_items] = React.useState([])
+    const [playlist_feature_data, set_playlist_feature_data] = React.useState({})
 
     React.useEffect(() => {
 
@@ -27,8 +25,8 @@ const Playlist: React.FC<Props> = (props) => {
             set_loading(true)
     
             fetch(`/api/playlist_items?access_token=${access_token}&playlist_id=${playlist_info.id}`)
-            .then((res: any) => res.json()) 
-            .then((data: any[]) => {
+            .then((res) => res.json()) 
+            .then((data) => {
                 set_playlist_items(data)
     
                 get_feature_data(data)
@@ -50,12 +48,12 @@ const Playlist: React.FC<Props> = (props) => {
                 })
     
             })
-            .catch( async (err: Error) => {
+            .catch( async (err) => {
                 await refresh_access_token()
                 access_token = window.localStorage.getItem('access_token')
                 fetch(`/api/playlist_items?access_token=${access_token}&playlist_id=${playlist_info.id}`)
-                .then((res: any) => res.json()) 
-                .then((data: any[]) => {
+                .then((res) => res.json()) 
+                .then((data) => {
                     set_playlist_items(data)
     
                     get_feature_data(data)
@@ -77,7 +75,7 @@ const Playlist: React.FC<Props> = (props) => {
                     })
     
                 })
-                .catch( async (err: Error) => {
+                .catch( async (err) => {
                     console.log(err)
                     set_loading(false)
                 })

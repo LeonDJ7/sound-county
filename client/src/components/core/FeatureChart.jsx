@@ -2,28 +2,25 @@ import React from 'react'
 import 'antd/dist/antd.css'
 import { Alert } from 'antd'
 import '../../css/FeatureChart.css'
-import { Chart, ChartConfiguration, ChartData, registerables } from 'chart.js'
+import { Chart, registerables } from 'chart.js'
+
 Chart.register(...registerables);
 
-interface Props {
-    feature_data: any
-    type: number
-}
-const FeatureChart: React.FC<Props> = (props) => {
+const FeatureChart = (props) => {
 
     let type = props.type
-    const [show_error_alert, set_show_error_alert] = React.useState<boolean>(false)
+    const [show_error_alert, set_show_error_alert] = React.useState(false)
 
     React.useEffect(() => {
 
-        const set_up_chart = (feature_data: any) => {
+        const set_up_chart = (feature_data) => {
 
             Chart.defaults.color ='lightgray';
             Chart.defaults.font.size = 12
     
             set_show_error_alert(false)
     
-            const chart_data: ChartData = {
+            const chart_data = {
                 labels: [
                     'danceability',
                     'energy',
@@ -50,7 +47,7 @@ const FeatureChart: React.FC<Props> = (props) => {
                 }]
             }
             
-            const config: ChartConfiguration = {
+            const config = {
                 type: 'line',
                 data: chart_data,
                 options: {
@@ -72,7 +69,7 @@ const FeatureChart: React.FC<Props> = (props) => {
             }
     
             new Chart(
-                document.getElementById(id) as HTMLCanvasElement,
+                document.getElementById(id),
                 config
             )
     
@@ -81,7 +78,7 @@ const FeatureChart: React.FC<Props> = (props) => {
         try {
             set_up_chart(props.feature_data)
         }
-        catch (err: any) {
+        catch (err) {
             set_show_error_alert(true)
         }
 
@@ -92,7 +89,7 @@ const FeatureChart: React.FC<Props> = (props) => {
 
             { show_error_alert && 
                 <div style={{marginBottom: '1rem'}}>
-                    <Alert showIcon message={'oops... something went wrong loading your graph'} type='error'></Alert>
+                    <Alert showIcon message={'oops... something went wrong loading your graph'} type='error' />
                 </div> 
             }
 

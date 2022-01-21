@@ -3,17 +3,14 @@ import 'antd/dist/antd.css'
 import { Popover } from 'antd'
 import { InfoCircleFilled } from '@ant-design/icons'
 
-interface Props {
-    hover_title: string,
-    hover_content: React.FC
-}
-const InfoPopover: React.FC<Props> = (props) => {
+const InfoPopover = (props) => {
 
     const hover_title = props.hover_title
     const hover_content = props.hover_content
-    const [hovered, set_hovered] = React.useState<boolean>(false)
+    
+    const [hovered, set_hovered] = React.useState(false)
 
-    const handle_hover_change = (visible: boolean) => {
+    const handle_hover_change = (visible) => {
         set_hovered(visible)
     };
 

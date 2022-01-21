@@ -5,29 +5,27 @@ import '../css/Contact.css'
 
 const { TextArea } = Input;
 
-interface Props {
-    
-}
-const Contact: React.FC<Props> = (props) => {
+const Contact = (props) => {
 
     const [message, setMessage] = React.useState('')
-    const [show_error_alert, set_show_error_alert] = React.useState<boolean>(false)
-    const [show_success_alert, set_show_success_alert] = React.useState<boolean>(false)
+    const [show_error_alert, set_show_error_alert] = React.useState(false)
+    const [show_success_alert, set_show_success_alert] = React.useState(false)
 
     const submit = () => {
         
         window.Email.send({
             Host : "smtp.gmail.com",
             Username : 'revsguy5@gmail.com',
-            Password: process.env.REACT_APP_GMAIL_PASSWORD as string,
+            Password: process.env.REACT_APP_GMAIL_PASSWORD,
             To : 'revsguy5@gmail.com',
             From : 'revsguy5@gmail.com',
             Subject : 'new sound county message',
             Body : message,
         })
-            .then( (message: any) => {
+            .then( (message) => {
+                console.log(message)
                 set_show_success_alert(true)
-            }).catch( (err: Error) => {
+            }).catch( (err) => {
                 set_show_error_alert(true)
                 console.log(err)
             })

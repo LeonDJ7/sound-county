@@ -7,22 +7,19 @@ import TrackList from '../components/home/TrackList'
 import FeatureChart from '../components/core/FeatureChart'
 import { Link } from 'react-router-dom'
 
-interface Props {
-    
-}
-const Home: React.FC<Props> = (props) => {
+const Home = (props) => {
 
-    const [logged_in, set_logged_in] = React.useState<boolean>(false)
-    const [user_playlists, set_user_playlists] = React.useState<any[]>([])
-    const [top_songs, set_top_songs] = React.useState<any[]>([])
-    const [top_songs_feature_data, set_top_songs_feature_data] = React.useState<any>()
-    const [top_artists, set_top_artists] = React.useState<any[]>([])
-    const [top_songs_error, set_top_songs_error] = React.useState<boolean>(false)
-    const [top_artists_loading, set_top_artists_loading] = React.useState<boolean>(false)
-    const [top_songs_loading, set_top_songs_loading] = React.useState<boolean>(false)
-    const [playlists_error, set_playlists_error] = React.useState<boolean>(false)
-    const [top_songs_feature_data_loading, set_top_songs_feature_data_loading] = React.useState<boolean>(false)
-    const [playlists_loading, set_playlists_loading] = React.useState<boolean>(false)
+    const [logged_in, set_logged_in] = React.useState(false)
+    const [user_playlists, set_user_playlists] = React.useState([])
+    const [top_songs, set_top_songs] = React.useState([])
+    const [top_songs_feature_data, set_top_songs_feature_data] = React.useState()
+    const [top_artists, set_top_artists] = React.useState([])
+    const [top_songs_error, set_top_songs_error] = React.useState(false)
+    const [top_artists_loading, set_top_artists_loading] = React.useState(false)
+    const [top_songs_loading, set_top_songs_loading] = React.useState(false)
+    const [playlists_error, set_playlists_error] = React.useState(false)
+    const [top_songs_feature_data_loading, set_top_songs_feature_data_loading] = React.useState(false)
+    const [playlists_loading, set_playlists_loading] = React.useState(false)
 
     React.useEffect( () => {
 
@@ -49,21 +46,21 @@ const Home: React.FC<Props> = (props) => {
         let access_token = window.localStorage.getItem('access_token')
 
         fetch(`/api/top_artists?access_token=${access_token}&time_range=short_term`)
-        .then((res: any) => res.json())
-        .then((data: any[]) => {
+        .then((res) => res.json())
+        .then((data) => {
             set_top_artists(data)
             set_top_artists_loading(false)
         })
-        .catch( async (err: any) => {
+        .catch( async (err) => {
             await refresh_access_token()
             access_token = window.localStorage.getItem('access_token')
             fetch(`/api/top_artists?access_token=${access_token}&time_range=short_term`)
-            .then((res: any) => res.json())
-            .then((data: any[]) => {
+            .then((res) => res.json())
+            .then((data) => {
                 set_top_artists(data)
                 set_top_artists_loading(false)
             })
-            .catch((err: any) => {
+            .catch((err) => {
                 set_top_songs_error(true)
                 set_top_artists_loading(false)
             })
@@ -76,8 +73,8 @@ const Home: React.FC<Props> = (props) => {
         let access_token = window.localStorage.getItem('access_token')
 
         fetch(`/api/top_tracks?access_token=${access_token}&time_range=short_term`)
-        .then((res: any) => res.json())
-        .then((data: any[]) => {
+        .then((res) => res.json())
+        .then((data) => {
             set_top_songs(data)
             set_top_songs_loading(false)
 
@@ -99,12 +96,12 @@ const Home: React.FC<Props> = (props) => {
             })
 
         })
-        .catch( async (err: any) => {
+        .catch( async (err) => {
             await refresh_access_token()
             access_token = window.localStorage.getItem('access_token')
             fetch(`/api/top_tracks?access_token=${access_token}&time_range=short_term`)
-            .then((res: any) => res.json())
-            .then((data: any[]) => {
+            .then((res) => res.json())
+            .then((data) => {
                 set_top_songs(data)
                 set_top_songs_loading(false)
 
@@ -127,7 +124,7 @@ const Home: React.FC<Props> = (props) => {
                 })
 
             })
-            .catch((err: any) => {
+            .catch((err) => {
                 console.log(err)
             })
         })
@@ -141,9 +138,9 @@ const Home: React.FC<Props> = (props) => {
         let access_token = window.localStorage.getItem('access_token')
 
         fetch(`/api/user_playlists?access_token=${access_token}&id=${id}`)
-        .then((res: any) => res.json())
-        .then((data: any[]) => {
-            set_user_playlists( data.map( (playlist: any) => {
+        .then((res) => res.json())
+        .then((data) => {
+            set_user_playlists( data.map( (playlist) => {
                 return {
                     name: playlist.name,
                     id: playlist.id,
@@ -152,13 +149,13 @@ const Home: React.FC<Props> = (props) => {
             }))
             set_playlists_loading(false)
         })
-        .catch( async (err: any) => {
+        .catch( async (err) => {
             await refresh_access_token()
             access_token = window.localStorage.getItem('access_token')
             fetch(`/api/user_playlists?access_token=${access_token}&id=${id}`)
-            .then((res: any) => res.json())
-            .then((data: any[]) => {
-                set_user_playlists( data.map( (playlist: any) => {
+            .then((res) => res.json())
+            .then((data) => {
+                set_user_playlists( data.map( (playlist) => {
                     return {
                         name: playlist.name,
                         id: playlist.id,
@@ -167,7 +164,7 @@ const Home: React.FC<Props> = (props) => {
                 }))
                 set_playlists_loading(false)
             })
-            .catch((err: any) => {
+            .catch((err) => {
                 console.log(err)
                 set_playlists_error(true)
                 set_playlists_loading(false)
@@ -219,7 +216,7 @@ const Home: React.FC<Props> = (props) => {
                     { !playlists_error && !playlists_loading &&
                         <span id='playlists-box' >
 
-                            { user_playlists.map((playlist: any, i) => {
+                            { user_playlists.map((playlist, i) => {
                                 return (
                                     <Link key={i} to={{
                                         pathname: `/playlists/${playlist.id}`,
